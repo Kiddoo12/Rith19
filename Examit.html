@@ -3,21 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>គណនាតម្លៃអគ្គិសនី</title>
+<title>គណនាតម្លៃអគ្គិសនីតាមកម្រិត</title>
 <link href="https://fonts.googleapis.com/css2?family=Hanuman:wght@400;700&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --bg: #0f1117;
-    --surface: #1a1d27;
+    --bg: #0b1120;
+    --surface: #0b1120;
     --card: #21242f;
     --border: rgba(255,255,255,0.08);
     --border-hover: rgba(255,255,255,0.18);
     --text: #f0f0f4;
     --muted: #8b8fa8;
     --hint: #555870;
-    --accent: #f5c518;
+    --accent: #00059b;
     --accent-dim: rgba(245,197,24,0.12);
     --danger: #ff6b6b;
     --danger-bg: rgba(255,107,107,0.1);
@@ -143,22 +143,29 @@
     pointer-events: none;
   }
 
-  .rate-field {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .rate-field label {
-    font-size: 13px;
+  .tier-info-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 12px;
     color: var(--muted);
-    white-space: nowrap;
-    flex-shrink: 0;
+    margin-bottom: 16px;
   }
 
-  .rate-field .input-wrap {
-    flex: 1;
+  .tier-title {
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 6px;
   }
+
+  .tier-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 3px 0;
+    border-bottom: 1px dashed rgba(255,255,255,0.03);
+  }
+  .tier-row:last-child { border: none; }
 
   .divider {
     border: none;
@@ -205,7 +212,7 @@
   }
 
   .metric-value {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 700;
     color: var(--text);
     margin-bottom: 4px;
@@ -249,13 +256,6 @@
     margin-left: 12px;
   }
 
-  .dash {
-    font-size: 38px;
-    font-weight: 700;
-    color: var(--hint);
-    line-height: 1;
-  }
-
   .submit-btn {
     width: 100%;
     background: var(--accent);
@@ -268,7 +268,6 @@
     font-family: 'Hanuman', serif;
     cursor: pointer;
     transition: opacity 0.2s, transform 0.1s;
-    margin-top: 1.25rem;
   }
 
   .submit-btn:hover { opacity: 0.9; }
@@ -302,7 +301,7 @@
   @media (max-width: 400px) {
     .field-row { grid-template-columns: 1fr; }
     .metrics-grid { grid-template-columns: 1fr 1fr; }
-    .total-amount, .dash { font-size: 28px; }
+    .total-amount { font-size: 28px; }
   }
 </style>
 </head>
@@ -313,7 +312,7 @@
   <div class="header">
     <div class="header-icon">⚡</div>
     <h1>គណនាតម្លៃអគ្គិសនី</h1>
-    <p>បញ្ចូលលេខម៉ែត្រ ដើម្បីគណនាថ្លៃអគ្គិសនី</p>
+    <p>បញ្ចូលលេខម៉ែត្រ ដើម្បីគណនាតាមកម្រិតពន្ធគន្លាក់</p>
   </div>
 
   <div class="card">
@@ -336,12 +335,13 @@
       </div>
     </div>
 
-    <div class="rate-field">
-      <label for="rate">តម្លៃ / kWh</label>
-      <div class="input-wrap">
-        <input type="number" id="rate" placeholder="620" min="0" step="1" value="620">
-        <span class="input-unit">រៀល</span>
-      </div>
+    <!-- តារាងបង្ហាញកម្រិតតម្លៃ -->
+    <div class="tier-info-box">
+      <p class="tier-title">អត្រាតម្លៃគិតតាមកម្រិតប្រើប្រាស់៖</p>
+      <div class="tier-row"><span>កម្រិតទី១ (០ ដល់ ១០ kWh)</span> <span>380 រៀល/kWh</span></div>
+      <div class="tier-row"><span>កម្រិតទី២ (១១ ដល់ ៥០ kWh)</span> <span>480 រៀល/kWh</span></div>
+      <div class="tier-row"><span>កម្រិតទី៣ (៥១ ដល់ ២០០ kWh)</span> <span>610 រៀល/kWh</span></div>
+      <div class="tier-row"><span>កម្រិតទី៤ (២០១ kWh ឡើងទៅ)</span> <span>730 រៀល/kWh</span></div>
     </div>
 
     <button class="submit-btn" onclick="calculate()">គណនា</button>
@@ -363,8 +363,8 @@
         <p class="metric-unit">kWh</p>
       </div>
       <div class="metric">
-        <p class="metric-label">តម្លៃ / kWh</p>
-        <p class="metric-value" id="metric-rate">620</p>
+        <p class="metric-label">តម្លៃមធ្យម/kWh</p>
+        <p class="metric-value" id="metric-rate">—</p>
         <p class="metric-unit">រៀល</p>
       </div>
       <div class="metric">
@@ -383,19 +383,18 @@
     </div>
   </div>
 
-  <p class="formula-note">រូបមន្ត៖ (ម៉ែត្រថ្មី − ម៉ែត្រចាស់) × តម្លៃក្នុង kWh = សរុប</p>
+  <p class="formula-note">គណនាតាមរូបមន្តពន្ធគន្លាក់វឌ្ឍនភាព (Progressive Tiered Tariff)</p>
 
 </div>
 
 <script>
   function fmtKh(n) {
-    return n.toLocaleString('en-US', { maximumFractionDigits: 0 });
+    return Math.round(n).toLocaleString('en-US', { maximumFractionDigits: 0 });
   }
 
   function calculate() {
     const oldVal = document.getElementById('old_reading').value;
     const newVal = document.getElementById('new_reading').value;
-    const rateVal = document.getElementById('rate').value || '620';
 
     const errorBox = document.getElementById('error-box');
     const errorMsg = document.getElementById('error-msg');
@@ -406,7 +405,6 @@
 
     const oldR = parseFloat(oldVal);
     const newR = parseFloat(newVal);
-    const rate = parseFloat(rateVal);
 
     if (newR < oldR) {
       errorMsg.textContent = 'លេខម៉ែត្រថ្មីត្រូវតែធំជាងលេខម៉ែត្រចាស់។';
@@ -414,14 +412,42 @@
       document.getElementById('total-display').textContent = '—';
       document.getElementById('metric-units').textContent = '—';
       document.getElementById('metric-range').textContent = '—';
+      document.getElementById('metric-rate').textContent = '—';
       return;
     }
 
     const units = newR - oldR;
-    const total = units * rate;
+    let total = 0;
+    let remaining = units;
+
+    // គណនាតាមកម្រិតទី១ (០ ដល់ ១០ kWh) -> 380 រៀល
+    if (remaining > 0) {
+      let t1 = Math.min(remaining, 10);
+      total += t1 * 380;
+      remaining -= t1;
+    }
+    // គណនាតាមកម្រិតទី២ (១១ ដល់ ៥០ kWh -> មាន ៤០ អង្គភាព) -> 480 រៀល
+    if (remaining > 0) {
+      let t2 = Math.min(remaining, 40);
+      total += t2 * 480;
+      remaining -= t2;
+    }
+    // គណនាតាមកម្រិតទី៣ (៥១ ដល់ ២០០ kWh -> មាន ១៥០ អង្គភាព) -> 610 រៀល
+    if (remaining > 0) {
+      let t3 = Math.min(remaining, 150);
+      total += t3 * 610;
+      remaining -= t3;
+    }
+    // គណនាតាមកម្រិតទី៤ (២០១ kWh ឡើងទៅ) -> 730 រៀល
+    if (remaining > 0) {
+      total += remaining * 730;
+    }
+
+    // គណនាតម្លៃមធ្យមក្នុង ១ kWh ដើម្បីបង្ហាញលើ UI
+    const avgRate = units > 0 ? (total / units) : 0;
 
     document.getElementById('metric-units').textContent = units.toFixed(2);
-    document.getElementById('metric-rate').textContent = fmtKh(rate);
+    document.getElementById('metric-rate').textContent = fmtKh(avgRate);
     document.getElementById('metric-range').textContent = oldR + ' → ' + newR;
     document.getElementById('total-display').textContent = fmtKh(total);
 
@@ -431,22 +457,15 @@
   function reset() {
     document.getElementById('old_reading').value = '';
     document.getElementById('new_reading').value = '';
-    document.getElementById('rate').value = '620';
     document.getElementById('error-box').classList.remove('visible');
     document.getElementById('metric-units').textContent = '—';
-    document.getElementById('metric-rate').textContent = '620';
+    document.getElementById('metric-rate').textContent = '—';
     document.getElementById('metric-range').textContent = '—';
     document.getElementById('total-display').textContent = '—';
     document.getElementById('reset-btn').classList.remove('visible');
   }
 
-  // Update rate display live
-  document.getElementById('rate').addEventListener('input', function() {
-    const r = parseFloat(this.value) || 620;
-    document.getElementById('metric-rate').textContent = fmtKh(r);
-  });
-
-  // Allow Enter key to calculate
+  // អនុញ្ញាតឱ្យចុច Enter ដើម្បីគណនា
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Enter') calculate();
   });
