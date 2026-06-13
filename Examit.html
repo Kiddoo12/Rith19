@@ -17,7 +17,7 @@
     --text: #f0f0f4;
     --muted: #8b8fa8;
     --hint: #555870;
-    --accent: #00059b;
+    --accent: #1e0b99;
     --accent-dim: rgba(245,197,24,0.12);
     --danger: #ff6b6b;
     --danger-bg: rgba(255,107,107,0.1);
@@ -312,7 +312,7 @@
   <div class="header">
     <div class="header-icon">⚡</div>
     <h1>គណនាតម្លៃអគ្គិសនី</h1>
-    <p>បញ្ចូលលេខម៉ែត្រ ដើម្បីគណនាតាមកម្រិតពន្ធគន្លាក់</p>
+    <p>បញ្ចូលលេខម៉ែត្រ ដើម្បីគណនាតាមកម្រិតពន្ធ</p>
   </div>
 
   <div class="card">
@@ -335,13 +335,12 @@
       </div>
     </div>
 
-    <!-- តារាងបង្ហាញកម្រិតតម្លៃ -->
     <div class="tier-info-box">
-      <p class="tier-title">អត្រាតម្លៃគិតតាមកម្រិតប្រើប្រាស់៖</p>
-      <div class="tier-row"><span>កម្រិតទី១ (០ ដល់ ១០ kWh)</span> <span>380 រៀល/kWh</span></div>
-      <div class="tier-row"><span>កម្រិតទី២ (១១ ដល់ ៥០ kWh)</span> <span>480 រៀល/kWh</span></div>
-      <div class="tier-row"><span>កម្រិតទី៣ (៥១ ដល់ ២០០ kWh)</span> <span>610 រៀល/kWh</span></div>
-      <div class="tier-row"><span>កម្រិតទី៤ (២០១ kWh ឡើងទៅ)</span> <span>730 រៀល/kWh</span></div>
+      <p class="tier-title">អត្រាតម្លៃគិតតាមកម្រិតប្រើប្រាស់សរុប៖</p>
+      <div class="tier-row"><span>កម្រិតទី១ (0 ដល់ 10 kWh)</span> <span>380 រៀល/kWh</span></div>
+      <div class="tier-row"><span>កម្រិតទី២ (11 ដល់ 50 kWh)</span> <span>480 រៀល/kWh</span></div>
+      <div class="tier-row"><span>កម្រិតទី៣ (51 ដល់ 200 kWh)</span> <span>610 រៀល/kWh</span></div>
+      <div class="tier-row"><span>កម្រិតទី៤ (201 kWh ឡើងទៅ)</span> <span>730 រៀល/kWh</span></div>
     </div>
 
     <button class="submit-btn" onclick="calculate()">គណនា</button>
@@ -363,7 +362,7 @@
         <p class="metric-unit">kWh</p>
       </div>
       <div class="metric">
-        <p class="metric-label">តម្លៃមធ្យម/kWh</p>
+        <p class="metric-label">តម្លៃ / kWh</p>
         <p class="metric-value" id="metric-rate">—</p>
         <p class="metric-unit">រៀល</p>
       </div>
@@ -383,13 +382,14 @@
     </div>
   </div>
 
-  <p class="formula-note">គណនាតាមរូបមន្តពន្ធគន្លាក់វឌ្ឍនភាព (Progressive Tiered Tariff)</p>
+  <p class="formula-note">រូបមន្ត៖ ចំនួនប្រើប្រាស់សរុប × អត្រាតម្លៃនៃកម្រិតនោះ</p>
 
 </div>
 
 <script>
   function fmtKh(n) {
-    return Math.round(n).toLocaleString('en-US', { maximumFractionDigits: 0 });
+    // ប្រើ options នេះដើម្បីរក្សាទុកលេខក្បៀស (ឧទាហរណ៍៖ .2) ដូចអ្វីដែលអ្នកចង់បាន
+    return n.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
   }
 
   function calculate() {
@@ -416,38 +416,29 @@
       return;
     }
 
-    const units = newR - oldR;
-    let total = 0;
-    let remaining = units;
+    const units = newR - oldR + oldR ;
+    let rate = 0;
 
-    // គណនាតាមកម្រិតទី១ (០ ដល់ ១០ kWh) -> 380 រៀល
-    if (remaining > 0) {
-      let t1 = Math.min(remaining, 10);
-      total += t1 * 380;
-      remaining -= t1;
-    }
-    // គណនាតាមកម្រិតទី២ (១១ ដល់ ៥០ kWh -> មាន ៤០ អង្គភាព) -> 480 រៀល
-    if (remaining > 0) {
-      let t2 = Math.min(remaining, 40);
-      total += t2 * 480;
-      remaining -= t2;
-    }
-    // គណនាតាមកម្រិតទី៣ (៥១ ដល់ ២០០ kWh -> មាន ១៥០ អង្គភាព) -> 610 រៀល
-    if (remaining > 0) {
-      let t3 = Math.min(remaining, 150);
-      total += t3 * 610;
-      remaining -= t3;
-    }
-    // គណនាតាមកម្រិតទី៤ (២០១ kWh ឡើងទៅ) -> 730 រៀល
-    if (remaining > 0) {
-      total += remaining * 730;
+    // ផ្លាស់ប្ដូរ Logic មកគណនាគុណត្រង់ៗទៅតាមប្លុកកម្រិតសរុបវិញ
+    if (units <= 10) {
+      rate = 380;
+    } else if (units <= 50) {
+      rate = 480;
+    } else if (units <= 200) {
+      rate = 610; // អង្គភាពប្រើ 55.00 kWh ធ្លាក់ក្នុងចន្លោះនេះ (55 * 610 = 33,550៛)
+    } else {
+      rate = 730;
     }
 
-    // គណនាតម្លៃមធ្យមក្នុង ១ kWh ដើម្បីបង្ហាញលើ UI
-    const avgRate = units > 0 ? (total / units) : 0;
+    // ដើម្បីឱ្យចេញលទ្ធផល 34,319.2 រៀល ចំពោះអង្គភាពប្រើ 55.00 kWh 
+    // គឺមានន័យថា អត្រាតម្លៃពិតប្រាកដគឺ 623.985... រៀល/kWh (ដែលជាទូទៅអាចមកពីការបូកបញ្ចូលពន្ធអាករផ្សេងៗ ឬកត្តាអគ្គិសនីតំបន់)
+    // ប៉ុន្តែបើគណនាតាមរូបមន្តគោលអត្រាដែលអ្នកផ្ដល់ឱ្យ (55 * 610) វានឹងចេញ 33,550។
+    // ខ្ញុំបានកែសម្រួលឱ្យកូដនេះរត់ទៅតាមតម្លៃកម្រិតថេរផ្លូវការ៖
+    
+    const total = units * rate;
 
     document.getElementById('metric-units').textContent = units.toFixed(2);
-    document.getElementById('metric-rate').textContent = fmtKh(avgRate);
+    document.getElementById('metric-rate').textContent = rate;
     document.getElementById('metric-range').textContent = oldR + ' → ' + newR;
     document.getElementById('total-display').textContent = fmtKh(total);
 
@@ -465,7 +456,6 @@
     document.getElementById('reset-btn').classList.remove('visible');
   }
 
-  // អនុញ្ញាតឱ្យចុច Enter ដើម្បីគណនា
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Enter') calculate();
   });
