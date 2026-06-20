@@ -111,10 +111,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             font-size: 50px;
             margin-bottom: 15px;
             display: inline-block;
-            animation: pulseTrophy 2s infinite alternate;
+            animation: pulseGlow 2s infinite alternate;
         }
-
-        /* ------------------------------------ */
 
         header {
             position: sticky;
@@ -425,11 +423,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             display: flex;
         }
 
+        /* Responsive Canvas Controls */
         canvas {
             background: #15803d;
             border: 4px solid #ffffff;
             border-radius: 12px;
             max-width: 100%;
+            height: auto;
             box-shadow: inset 0 0 40px rgba(0,0,0,0.2);
             display: block;
         }
@@ -461,6 +461,83 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         .snake-score-board span {
             color: #22c55e;
+        }
+
+        /* --- MOBILE TOUCH CONTROLS PANEL --- */
+        .mobile-controls {
+            display: none; /* Hidden on Desktop */
+            width: 100%;
+            max-width: 320px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+
+        /* Mobile D-Pad layout for Snake */
+        .d-pad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            width: 180px;
+            height: 180px;
+        }
+
+        .d-btn {
+            background: #1e293b;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border-radius: 14px;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+        }
+
+        .d-btn:active {
+            background: #3b82f6;
+            transform: scale(0.95);
+        }
+
+        .d-up { grid-column: 2; }
+        .d-left { grid-column: 1; grid-row: 2; }
+        .d-right { grid-column: 3; grid-row: 2; }
+        .d-down { grid-column: 2; grid-row: 3; }
+
+        /* Mobile Slider layout for Football */
+        .football-pad {
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .fb-btn {
+            flex: 1;
+            height: 60px;
+            background: #1e293b;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+            touch-action: manipulation;
+        }
+
+        .fb-btn:active {
+            background: #3b82f6;
+        }
+
+        /* Display mobile view overrides */
+        @media (max-width: 768px) {
+            .mobile-controls {
+                display: flex;
+            }
         }
 
         /* ---------------------------- */
@@ -804,7 +881,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div id="footballPanel" class="game-panel active">
             <canvas id="footballCanvas" width="700" height="400"></canvas>
             <div class="game-controls-hint">
-                Controls: Use <span>W / S</span> keys or <span>Up / Down Arrow</span> keys to move your blue paddle.
+                Controls: Use <span>W / S</span> keys, <span>Arrows</span>, or the <span>Buttons Below</span>.
+            </div>
+            <div class="mobile-controls">
+                <div class="football-pad">
+                    <button class="fb-btn" id="touchUp">MOVE UP ▲</button>
+                    <button class="fb-btn" id="touchDown">MOVE DOWN ▼</button>
+                </div>
             </div>
         </div>
 
@@ -815,7 +898,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <canvas id="snakeCanvas" width="400" height="400"></canvas>
             <div class="game-controls-hint">
-                Controls: Use <span>Arrow Keys</span> or <span>W, A, S, D</span> to drive the snake. Do not hit the walls or your own tail!
+                Controls: Use <span>Arrow Keys</span>, <span>WASD</span>, or the <span>On-screen D-Pad</span>.
+            </div>
+            <div class="mobile-controls">
+                <div class="d-pad">
+                    <button class="d-btn d-up" onclick="sendSnakeDirection('up')">▲</button>
+                    <button class="d-btn d-left" onclick="sendSnakeDirection('left')">◀</button>
+                    <button class="d-btn d-right" onclick="sendSnakeDirection('right')">▶</button>
+                    <button class="d-btn d-down" onclick="sendSnakeDirection('down')">▼</button>
+                </div>
             </div>
         </div>
     </div>
@@ -1023,11 +1114,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     function playWhistle() {
         whistleSound.currentTime = 0; 
-        whistleSound.play().catch(err => console.log("Audio waiting for user click interaction: ", err));
+        whistleSound.play().catch(err => console.log("Audio waiting for user context interaction: ", err));
     }
 
     // --- WELCOME INTERACTION LOADER ---
-    // Triggers the sound the split second they accept and enter the site
     function enterWebsite() {
         const overlay = document.getElementById("welcomePopUp");
         overlay.style.opacity = "0";
@@ -1035,7 +1125,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             overlay.style.display = "none";
         }, 500);
         
-        playWhistle(); // Triggers whistle blow sound instantly on join!
+        playWhistle(); 
     }
 
     // Tab Controller
@@ -1072,6 +1162,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     });
     window.addEventListener("keyup", (e) => { keys[e.key] = false; });
+
+    // Mobile Variables for Football
+    let mobileUpActive = false;
+    let mobileDownActive = false;
+
+    // Mobile Event Listeners for Football Paddles
+    document.getElementById("touchUp").addEventListener("touchstart", (e) => { e.preventDefault(); mobileUpActive = true; });
+    document.getElementById("touchUp").addEventListener("touchend", () => { mobileUpActive = false; });
+    document.getElementById("touchDown").addEventListener("touchstart", (e) => { e.preventDefault(); mobileDownActive = true; });
+    document.getElementById("touchDown").addEventListener("touchend", () => { mobileDownActive = false; });
 
     function drawFootballField() {
         fbCtx.strokeStyle = "rgba(255,255,255,0.4)";
@@ -1114,8 +1214,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     function updateFootball() {
-        if (keys["ArrowUp"] || keys["w"] || keys["W"]) player.y = Math.max(0, player.y - player.speed);
-        if (keys["ArrowDown"] || keys["s"] || keys["S"]) player.y = Math.min(fbCanvas.height - player.height, player.y + player.speed);
+        // Desktop + On-screen mobile controls tracking combined
+        if (keys["ArrowUp"] || keys["w"] || keys["W"] || mobileUpActive) player.y = Math.max(0, player.y - player.speed);
+        if (keys["ArrowDown"] || keys["s"] || keys["S"] || mobileDownActive) player.y = Math.min(fbCanvas.height - player.height, player.y + player.speed);
 
         let aiTarget = ball.y - ai.height / 2;
         if (ai.y < aiTarget) ai.y += Math.min(ai.speed, aiTarget - ai.y);
@@ -1244,13 +1345,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         snakeCtx.fillRect(0, 0, snakeCanvas.width, snakeCanvas.height);
         
         snakeCtx.fillStyle = "#ffffff";
-        snakeCtx.font = "bold 28px Arial";
+        snakeCtx.font = "bold 24px Arial";
         snakeCtx.textAlign = "center";
         snakeCtx.fillText("Game Over!", snakeCanvas.width / 2, snakeCanvas.height / 2 - 10);
         
-        snakeCtx.font = "16px Arial";
+        snakeCtx.font = "14px Arial";
         snakeCtx.fillStyle = "#94a3b8";
-        snakeCtx.fillText("Press any Arrow Key / WASD to Restart", snakeCanvas.width / 2, snakeCanvas.height / 2 + 20);
+        snakeCtx.fillText("Tap a D-Pad Button / Key to Restart", snakeCanvas.width / 2, snakeCanvas.height / 2 + 20);
+    }
+
+    // Handles mobile on-screen D-Pad direction assignments safely
+    function sendSnakeDirection(dir) {
+        const goingUp = dy === -gridSize;
+        const goingDown = dy === gridSize;
+        const goingRight = dx === gridSize;
+        const goingLeft = dx === -gridSize;
+
+        // Restart engine check if game is stopped
+        if (!snakeGameInterval || snake.length === 0) {
+            initSnakeGame();
+            return;
+        }
+
+        if (dir === 'up' && !goingDown) { dx = 0; dy = -gridSize; }
+        if (dir === 'down' && !goingUp) { dx = 0; dy = gridSize; }
+        if (dir === 'left' && !goingRight) { dx = -gridSize; dy = 0; }
+        if (dir === 'right' && !goingLeft) { dx = gridSize; dy = 0; }
     }
 
     window.addEventListener("keydown", (e) => {
