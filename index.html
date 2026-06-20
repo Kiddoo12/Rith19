@@ -1,3 +1,1065 @@
+<?php
+$success = "";
+$error = "";
+
+$name = "";
+$email = "";
+$subject = "";
+$message = "";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $name = trim(htmlspecialchars($_POST["name"] ?? ""));
+    $email = trim(htmlspecialchars($_POST["email"] ?? ""));
+    $subject = trim(htmlspecialchars($_POST["subject"] ?? ""));
+    $message = trim(htmlspecialchars($_POST["message"] ?? ""));
+
+    if (empty($name) || empty($email) || empty($subject) || empty($message)) {
+        $error = "Please fill in all fields.";
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $error = "Please enter a valid email address.";
+    } else {
+        $success = "Thank you, $name! Your message has been received successfully.";
+        // Reset fields on successful validation
+        $name = $email = $subject = $message = "";
+    }
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Student Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #0b1120;
+            color: #e5e7eb;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        /* --- WELCOME AUDIO OVERLAY POP-UP --- */
+        .welcome-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(7, 11, 22, 0.98);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            transition: 0.5s ease-out;
+        }
+
+        .welcome-card {
+            background: linear-gradient(145deg, #111827, #0f172a);
+            border: 2px solid #eab308;
+            border-radius: 24px;
+            padding: 40px;
+            text-align: center;
+            max-width: 450px;
+            width: 90%;
+            box-shadow: 0 20px 50px rgba(234, 179, 8, 0.15);
+        }
+
+        .welcome-card h2 {
+            color: #ffffff;
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+
+        .welcome-card h2 span {
+            color: #60a5fa;
+        }
+
+        .welcome-card p {
+            color: #94a3b8;
+            font-size: 15px;
+            margin-bottom: 25px;
+        }
+
+        .welcome-icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+            display: inline-block;
+            animation: pulseGlow 2s infinite alternate;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(11, 17, 32, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 0;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #60a5fa;
+            letter-spacing: 1px;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 22px;
+        }
+
+        nav ul li a {
+            color: #dbeafe;
+            font-size: 15px;
+            transition: 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #60a5fa;
+        }
+
+        .hero {
+            padding: 90px 0 70px;
+            background:
+                radial-gradient(circle at top left, rgba(59,130,246,0.25), transparent 30%),
+                radial-gradient(circle at bottom right, rgba(14,165,233,0.18), transparent 30%),
+                #0b1120;
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .hero-text .small-title {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 30px;
+            background: rgba(96,165,250,0.12);
+            color: #93c5fd;
+            font-size: 14px;
+            margin-bottom: 18px;
+        }
+
+        .hero-text h1 {
+            font-size: 54px;
+            line-height: 1.15;
+            margin-bottom: 18px;
+            color: #ffffff;
+        }
+
+        .hero-text h1 span {
+            color: #60a5fa;
+        }
+
+        .hero-text p {
+            max-width: 600px;
+            color: #cbd5e1;
+            font-size: 17px;
+            margin-bottom: 28px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 13px 24px;
+            border-radius: 12px;
+            font-weight: bold;
+            display: inline-block;
+            transition: 0.3s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            color: white;
+            box-shadow: 0 10px 25px rgba(59,130,246,0.25);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            border: 1px solid rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.04);
+            color: #e5e7eb;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.08);
+        }
+
+        .hero-card {
+            background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+        }
+
+        .profile-image {
+            width: 220px;
+            height: 220px;
+            margin: 0 auto 20px;
+            border-radius: 24px;
+            overflow: hidden;
+            border: 3px solid rgba(96,165,250,0.35);
+            background: #111827;
+        }
+
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hero-card h3 {
+            text-align: center;
+            font-size: 28px;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+
+        .hero-card p {
+            text-align: center;
+            color: #cbd5e1;
+            margin-bottom: 20px;
+        }
+
+        .quick-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .quick-info div {
+            background: rgba(255,255,255,0.04);
+            border-radius: 14px;
+            padding: 14px;
+            text-align: center;
+        }
+
+        .quick-info h4 {
+            color: #60a5fa;
+            font-size: 18px;
+            margin-bottom: 6px;
+        }
+
+        /* --- WORLD CUP BANNER --- */
+        .worldcup-section {
+            padding: 40px 0;
+            background: linear-gradient(180deg, #0b1120, #042f2e);
+            border-top: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .wc-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 24px;
+            padding: 30px;
+            border: 1px solid rgba(234, 179, 8, 0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+
+        .wc-text-content {
+            z-index: 2;
+            max-width: 60%;
+        }
+
+        .wc-badge {
+            display: inline-block;
+            background: #eab308;
+            color: #000;
+            font-weight: bold;
+            font-size: 12px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 0 15px rgba(234, 179, 8, 0.4);
+        }
+
+        .wc-text-content h2 {
+            color: #ffffff;
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .wc-text-content h2 span {
+            color: #eab308;
+        }
+
+        .wc-stage {
+            position: relative;
+            width: 300px;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .wc-trophy {
+            font-size: 70px;
+            z-index: 2;
+            filter: drop-shadow(0 0 15px rgba(234, 179, 8, 0.6));
+            animation: floatTrophy 3s ease-in-out infinite alternate;
+        }
+
+        .wc-ball {
+            font-size: 30px;
+            position: absolute;
+            left: 40px;
+            bottom: 20px;
+            z-index: 2;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+            animation: bounceBall 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite alternate, rotateBall 3s linear infinite;
+        }
+
+        .wc-glow {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle, rgba(234, 179, 8, 0.25) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: pulseGlow 2s infinite alternate;
+        }
+
+        @keyframes floatTrophy { 0% { transform: translateY(5px) rotate(-3deg); } 100% { transform: translateY(-15px) rotate(3deg); } }
+        @keyframes bounceBall { 0% { bottom: 15px; transform: scaleY(0.85); } 15% { transform: scaleY(1); } 100% { bottom: 95px; } }
+        @keyframes rotateBall { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes pulseGlow { 0% { transform: scale(0.8); opacity: 0.5; } 100% { transform: scale(1.3); opacity: 1; } }
+
+        /* --- MINI GAMES ARCADE SYSTEM --- */
+        .arcade-section {
+            background: #0f172a;
+            padding: 85px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .arcade-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            background: #1e293b;
+            color: #94a3b8;
+            border-radius: 10px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .tab-btn.active {
+            background: #3b82f6;
+            color: #ffffff;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+        }
+
+        .game-panel {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #111827;
+            padding: 30px;
+            border-radius: 24px;
+            border: 1px solid rgba(255,255,255,0.06);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+
+        .game-panel.active {
+            display: flex;
+        }
+
+        /* Responsive Canvas Controls with Strict iPad Multi-Touch Overrides */
+        canvas {
+            border: 4px solid #ffffff;
+            border-radius: 12px;
+            max-width: 100%;
+            height: auto;
+            box-shadow: inset 0 0 40px rgba(0,0,0,0.2);
+            display: block;
+            touch-action: none; /* STOPS IPAD SAFARI GESTURE CONFLICTS COMPLETELY */
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        #footballCanvas {
+            background: #15803d;
+        }
+
+        #snakeCanvas {
+            background: #020617;
+        }
+
+        .game-controls-hint {
+            margin-top: 15px;
+            color: #94a3b8;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .game-controls-hint span {
+            color: #60a5fa;
+            font-weight: bold;
+        }
+
+        .snake-score-board {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 15px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .snake-score-board span {
+            color: #22c55e;
+        }
+
+        /* --- ARCADE TABLET & IPAD PAD STYLES --- */
+        .mobile-controls {
+            display: none; 
+            width: 100%;
+            max-width: 360px;
+            margin-top: 22px;
+            justify-content: center;
+        }
+
+        .d-pad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            width: 200px;
+            height: 200px;
+        }
+
+        .d-btn {
+            background: #1e293b;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border-radius: 18px;
+            font-size: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: none;
+        }
+
+        .d-btn:active {
+            background: #3b82f6;
+            color: #ffffff;
+        }
+
+        .d-up { grid-column: 2; }
+        .d-left { grid-column: 1; grid-row: 2; }
+        .d-right { grid-column: 3; grid-row: 2; }
+        .d-down { grid-column: 2; grid-row: 3; }
+
+        .football-pad {
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+            gap: 25px;
+        }
+
+        .fb-btn {
+            flex: 1;
+            height: 65px;
+            background: #1e293b;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border-radius: 16px;
+            font-weight: bold;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: none;
+        }
+
+        .fb-btn:active {
+            background: #3b82f6;
+        }
+
+        /* Active Display Rule on iPad/Mobile screen sizes */
+        @media (max-width: 1024px) {
+            .mobile-controls {
+                display: flex;
+            }
+        }
+
+        section {
+            padding: 85px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title h2 {
+            font-size: 38px;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        .section-title p {
+            max-width: 700px;
+            margin: auto;
+            color: #94a3b8;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        .card {
+            background: #111827;
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 22px;
+            padding: 28px;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.18);
+        }
+
+        .card h3 {
+            color: #ffffff;
+            margin-bottom: 16px;
+            font-size: 24px;
+        }
+
+        .card p {
+            color: #cbd5e1;
+        }
+
+        .info-list li {
+            margin-bottom: 12px;
+            color: #cbd5e1;
+        }
+
+        .info-list strong {
+            color: #60a5fa;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 22px;
+        }
+
+        .skill-card {
+            background: #111827;
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 20px;
+            padding: 24px;
+            transition: 0.3s;
+            display: block;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(96,165,250,0.25);
+        }
+
+        .skill-card h3 {
+            color: #ffffff;
+            margin-bottom: 12px;
+        }
+
+        .skill-card p {
+            color: #cbd5e1;
+            margin-bottom: 14px;
+        }
+
+        .skill-bar {
+            width: 100%;
+            height: 10px;
+            background: #1f2937;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .skill-fill {
+            height: 100%;
+            border-radius: 20px;
+            background: linear-gradient(90deg, #3b82f6, #06b6d4);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .project-card {
+            background: #111827;
+            border-radius: 22px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.06);
+            transition: 0.3s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(96,165,250,0.25);
+        }
+
+        .project-content {
+            padding: 22px;
+        }
+
+        .project-content h3 {
+            color: #ffffff;
+            margin-bottom: 12px;
+            font-size: 22px;
+        }
+
+        .project-content p {
+            color: #cbd5e1;
+            margin-bottom: 15px;
+        }
+
+        .project-tag {
+            display: inline-block;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            padding: 7px 12px;
+            border-radius: 30px;
+            background: rgba(59,130,246,0.12);
+            color: #93c5fd;
+            font-size: 13px;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+            gap: 24px;
+        }
+
+        .contact-info p {
+            margin-bottom: 12px;
+            color: #cbd5e1;
+        }
+
+        .contact-info strong {
+            color: #60a5fa;
+        }
+
+        .message-box {
+            padding: 14px 16px;
+            border-radius: 12px;
+            margin-bottom: 18px;
+            font-weight: bold;
+        }
+
+        .success {
+            background: rgba(34,197,94,0.15);
+            color: #86efac;
+            border: 1px solid rgba(34,197,94,0.2);
+        }
+
+        .error {
+            background: rgba(239,68,68,0.15);
+            color: #fca5a5;
+            border: 1px solid rgba(239,68,68,0.2);
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: #0f172a;
+            color: #ffffff;
+            outline: none;
+            font-size: 15px;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: rgba(96,165,250,0.45);
+        }
+
+        textarea {
+            min-height: 140px;
+            resize: vertical;
+        }
+
+        footer {
+            padding: 26px 0;
+            text-align: center;
+            color: #94a3b8;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            background: #0b1120;
+        }
+
+        @media (max-width: 900px) {
+            .hero-content, .about-grid, .contact-grid, .wc-container {
+                grid-template-columns: 1fr;
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .wc-text-content { max-width: 100%; margin-bottom: 20px; }
+            nav { flex-direction: column; gap: 14px; }
+            nav ul { flex-wrap: wrap; justify-content: center; }
+            .hero-text h1 { font-size: 40px; }
+        }
+
+        @media (max-width: 600px) {
+            .hero-text h1 { font-size: 32px; }
+            .section-title h2 { font-size: 30px; }
+            .quick-info { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="welcomePopUp" class="welcome-overlay">
+    <div class="welcome-card">
+        <span class="welcome-icon">🏆</span>
+        <h2>Welcome to <span>MyPortfolio</span></h2>
+        <p>Explore my IT school work, live coding skills, and custom browser-based arcade engines!</p>
+        <button class="btn btn-primary" onclick="enterWebsite()">Enter & Play Whistle ⚽</button>
+    </div>
+</div>
+
+<header>
+    <div class="container">
+        <nav>
+            <div class="logo">MyPortfolio</div>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#arcade">Arcade Games</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<section class="hero" id="home">
+    <div class="container hero-content">
+        <div class="hero-text">
+            <span class="small-title">Student Portfolio Website</span>
+            <h1>Hello, I'm <span>Bunthoeurn Thearith</span></h1>
+            <p>
+                I am a student who loves technology, web design, and building creative digital projects.
+                This portfolio presents my skills, academic work, and personal projects in one modern website.
+            </p>
+            <div class="btn-group">
+                <a href="#projects" class="btn btn-primary">See My Projects</a>
+                <a href="#arcade" class="btn btn-secondary">Play Arcade Games</a>
+            </div>
+        </div>
+
+        <div class="hero-card">
+            <div class="profile-image">
+                <img src="https://lh3.googleusercontent.com/a/ACg8ocJxND8bHVbiA28TGb_14l_iDCdp6J17w8Iyp2CMYH-TmvcE_fQ=s400-c" alt="Profile Picture">
+            </div>
+            <h3>Bunthoeurn Thearith</h3>
+            <p>Student • Web Learner • Future Developer</p>
+
+            <div class="quick-info">
+                <div>
+                    <h4>4+</h4>
+                    <span>Skills</span>
+                </div>
+                <div>
+                    <h4>3+</h4>
+                    <span>Projects</span>
+                </div>
+                <div>
+                    <h4>100%</h4>
+                    <span>Learning</span>
+                </div>
+                <div>
+                    <h4>2026</h4>
+                    <span>Portfolio</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="worldcup-section">
+    <div class="container wc-container">
+        <div class="wc-text-content">
+            <span class="wc-badge">Live Hobby Feature</span>
+            <h2>Football & <span>World Cup</span> Passion</h2>
+            <p>Outside of writing code, I follow global sports engineering and data analytics. Counting down to the grandest tournament on earth!</p>
+        </div>
+        <div class="wc-stage">
+            <div class="wc-glow"></div>
+            <div class="wc-ball">⚽</div>
+            <div class="wc-trophy">🏆</div>
+        </div>
+    </div>
+</div>
+
+<section id="arcade" class="arcade-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>Interactive JavaScript Arcade Center</h2>
+            <p>Explore games completely rendered using the HTML5 Canvas API, showing execution loop engines and coordinates calculation.</p>
+        </div>
+        
+        <div class="arcade-tabs">
+            <button class="btn tab-btn active" onclick="switchGame('football')">⚽ Football Game</button>
+            <button class="btn tab-btn" onclick="switchGame('snake')">🐍 Snake Game</button>
+        </div>
+
+        <div id="footballPanel" class="game-panel active">
+            <canvas id="footballCanvas" width="700" height="400"></canvas>
+            <div class="game-controls-hint">
+                Controls: Use <span>W / S</span> keys, <span>Arrows</span>, or the <span>Buttons Below</span>.
+            </div>
+            <div class="mobile-controls">
+                <div class="football-pad">
+                    <button class="fb-btn" id="touchUp">MOVE UP ▲</button>
+                    <button class="fb-btn" id="touchDown">MOVE DOWN ▼</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="snakePanel" class="game-panel">
+            <div class="snake-score-board">
+                <div>Score: <span id="currentSnakeScore">0</span></div>
+                <div>High Score: <span id="highSnakeScore">0</span></div>
+            </div>
+            <canvas id="snakeCanvas" width="400" height="400"></canvas>
+            <div class="game-controls-hint">
+                Controls: Use <span>Arrow Keys</span>, <span>WASD</span>, or the <span>On-screen D-Pad</span>.
+            </div>
+            <div class="mobile-controls">
+                <div class="d-pad">
+                    </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="about">
+    <div class="container">
+        <div class="section-title">
+            <h2>About Me</h2>
+            <p>An introduction to my backgrounds, learning journey, and academic milestones.</p>
+        </div>
+        <div class="about-grid">
+            <div class="card">
+                <h3>My Journey</h3>
+                <p>I am a passionate student deeply driven by software architecture, system analysis, and frontend interactive styling patterns. I focus heavily on writing optimized, scalable architectures while exploring algorithms, interactive layouts, and modern content ecosystems.</p>
+            </div>
+            <div class="card">
+                <h3>Personal Information</h3>
+                <ul class="info-list">
+                    <li><strong>Name:</strong> Bunthoeurn Thearith</li>
+                    <li><strong>Role:</strong> Web Engineering Student</li>
+                    <li><strong>Status:</strong> Actively Learning & Building</li>
+                    <li><strong>Current Year:</strong> 2026</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="skills" style="background:#0f172a;">
+    <div class="container">
+        <div class="section-title">
+            <h2>My Tech Stack</h2>
+            <p>Programming standards, systems tools, and technical architectures I learn and implement daily.</p>
+        </div>
+        <div class="skills-grid">
+            <div class="skill-card">
+                <h3>HTML5 & CSS3</h3>
+                <p>Responsive interface structures, layout alignments, and smooth CSS keyframe animations.</p>
+                <div class="skill-bar"><div class="skill-fill" style="width: 90%;"></div></div>
+            </div>
+            <div class="skill-card">
+                <h3>JavaScript Engine</h3>
+                <p>Execution looping, asynchronous rendering operations, and real-time state arrays tracking.</p>
+                <div class="skill-bar"><div class="skill-fill" style="width: 85%;"></div></div>
+            </div>
+            <div class="skill-card">
+                <h3>PHP Development</h3>
+                <p>Server-side application handling, secure server array validations, and endpoint management.</p>
+                <div class="skill-bar"><div class="skill-fill" style="width: 75%;"></div></div>
+            </div>
+            <div class="skill-card">
+                <h3>React Framework</h3>
+                <p>Component structures, contextual data cycles, and declarative user interface synchronization.</p>
+                <div class="skill-bar"><div class="skill-fill" style="width: 80%;"></div></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="projects">
+    <div class="container">
+        <div class="section-title">
+            <h2>Featured Projects</h2>
+            <p>An overview of software engineering challenges, platform prototypes, and production roadmaps.</p>
+        </div>
+        <div class="projects-grid">
+            <div class="project-card">
+                <div class="project-content">
+                    <h3>Exercise Engine</h3>
+                    <p>An upcoming step-by-step educational product solution platform guiding users through complex problem fields covering Mathematics, Language processing, and scientific proofs.</p>
+                    <span class="project-tag">PHP Architecture</span>
+                    <span class="project-tag">React Engine</span>
+                    <span class="project-tag">Product Build</span>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="project-content">
+                    <h3>Student Portfolio Core</h3>
+                    <p>A modern, modular template framework built to deploy clean, high-performance professional portfolio layouts with complete fluid responsive compatibility matrices.</p>
+                    <span class="project-tag">HTML5 UI</span>
+                    <span class="project-tag">CSS Grid Styling</span>
+                    <span class="project-tag">Full Responsive</span>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="project-content">
+                    <h3>Canvas Gaming Engine</h3>
+                    <p>A high-performance lightweight script library delivering logic ticks, coordinate calculations, state trackers, and smooth custom canvas refresh loops.</p>
+                    <span class="project-tag">Vanilla JS</span>
+                    <span class="project-tag">Canvas API</span>
+                    <span class="project-tag">Arcade Physics</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="contact" style="background:#0f172a;">
+    <div class="container">
+        <div class="section-title">
+            <h2>Get In Touch</h2>
+            <p>Have an interesting project suggestion or looking to collaborate? Drop a message down below!</p>
+        </div>
+        <div class="contact-grid">
+            <div class="contact-info">
+                <div class="card" style="height: 100%;">
+                    <h3>Contact Channels</h3>
+                    <p style="margin-bottom:20px;">Feel free to drop a message through this form. All inputs are evaluated instantly via backend data validation arrays securely.</p>
+                    <p><strong>Email:</strong> communication@yourdomain.com</p>
+                    <p><strong>Location:</strong> Cambodia University Campus</p>
+                    <p style="margin-top:20px;"><strong>Operational Engine:</strong> PHP Form Validation</p>
+                </div>
+            </div>
+            <div class="contact-form">
+                <div class="card">
+                    <?php if (!empty($error)): ?>
+                        <div class="message-box error"><?php echo $error; ?></div>
+                    <?php endif; ?>
+                    <?php if (!empty($success)): ?>
+                        <div class="message-box success"><?php echo $success; ?></div>
+                    <?php endif; ?>
+
+                    <form action="index.php#contact" method="POST">
+                        <div class="form-group">
+                            <label for="name">Your Name</label>
+                            <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($name); ?>" placeholder="Enter your full name">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Your Email</label>
+                            <input type="text" id="email" name="email" value="<?php echo htmlspecialchars($email); ?>" placeholder="name@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" name="subject" value="<?php echo htmlspecialchars($subject); ?>" placeholder="What are you getting in touch about?">
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" placeholder="Type your message out here..."><?php echo htmlspecialchars($message); ?></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Send Security Checked Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p>&copy; 2026 Bunthoeurn Thearith. Built from idea to code production architecture smoothly.</p>
+</footer>
+
 <script>
     // --- 1. POPUP & GLOBAL SITE NAVIGATION LAYERS ---
     function enterWebsite() {
@@ -251,12 +1313,7 @@
         el.addEventListener('mouseup', stopAction);
     }
 
-    // Bind Touch Controllers to Loop Frameworks
-    configureTouchControls('touchUp', 'touchUp');
-    configureTouchControls('touchDown', 'touchDown');
-    configureTouchControls('sUp', 'sUp');
-
-    // Dynamically insert remaining directional elements into your structural D-Pad layout
+    // Initialize D-Pad inside the DOM dynamically
     const dPadElement = document.querySelector('.d-pad');
     if (dPadElement) {
         dPadElement.innerHTML = `
@@ -265,11 +1322,15 @@
             <button class="d-btn d-right" id="sRight">▶</button>
             <button class="d-btn d-down" id="sDown">▼</button>
         `;
-        configureTouchControls('sUp', 'sUp');
-        configureTouchControls('sLeft', 'sLeft');
-        configureTouchControls('sRight', 'sRight');
-        configureTouchControls('sDown', 'sDown');
     }
+
+    // Bind Touch Controllers to Loop Frameworks
+    configureTouchControls('touchUp', 'touchUp');
+    configureTouchControls('touchDown', 'touchDown');
+    configureTouchControls('sUp', 'sUp');
+    configureTouchControls('sLeft', 'sLeft');
+    configureTouchControls('sRight', 'sRight');
+    configureTouchControls('sDown', 'sDown');
 
     // Auto-Run Default Selection Loop on Execution Init
     window.onload = () => {
@@ -277,4 +1338,4 @@
     };
 </script>
 </body>
-</html>
+</html>s
