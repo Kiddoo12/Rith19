@@ -1,12 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title></title>
-</head>
-<body>
-  <?php
+<?php
 $success = "";
 $error = "";
 
@@ -21,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $subject = trim(htmlspecialchars($_POST["subject"] ?? ""));
     $message = trim(htmlspecialchars($_POST["message"] ?? ""));
 
-    if (empty($name)  empty($email)  empty($subject) || empty($message)) {
+    if (empty($name) || empty($email) || empty($subject) || empty($message)) {
         $error = "Please fill in all fields.";
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $error = "Please enter a valid email address.";
@@ -49,6 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             background: #0b1120;
             color: #e5e7eb;
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
         a {
@@ -70,6 +63,58 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             max-width: 1200px;
             margin: auto;
         }
+
+        /* --- WELCOME AUDIO OVERLAY POP-UP --- */
+        .welcome-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(7, 11, 22, 0.98);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            transition: 0.5s ease-out;
+        }
+
+        .welcome-card {
+            background: linear-gradient(145deg, #111827, #0f172a);
+            border: 2px solid #eab308;
+            border-radius: 24px;
+            padding: 40px;
+            text-align: center;
+            max-width: 450px;
+            width: 90%;
+            box-shadow: 0 20px 50px rgba(234, 179, 8, 0.15);
+        }
+
+        .welcome-card h2 {
+            color: #ffffff;
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+
+        .welcome-card h2 span {
+            color: #60a5fa;
+        }
+
+        .welcome-card p {
+            color: #94a3b8;
+            font-size: 15px;
+            margin-bottom: 25px;
+        }
+
+        .welcome-icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+            display: inline-block;
+            animation: pulseTrophy 2s infinite alternate;
+        }
+
+        /* ------------------------------------ */
 
         header {
             position: sticky;
@@ -164,6 +209,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             font-weight: bold;
             display: inline-block;
             transition: 0.3s;
+            cursor: pointer;
+            border: none;
         }
 
         .btn-primary {
@@ -176,8 +223,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             transform: translateY(-2px);
         }
 
-        
-.btn-secondary {
+        .btn-secondary {
             border: 1px solid rgba(255,255,255,0.15);
             background: rgba(255,255,255,0.04);
             color: #e5e7eb;
@@ -242,6 +288,182 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             font-size: 18px;
             margin-bottom: 6px;
         }
+
+        /* --- WORLD CUP BANNER --- */
+        .worldcup-section {
+            padding: 40px 0;
+            background: linear-gradient(180deg, #0b1120, #042f2e);
+            border-top: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .wc-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 24px;
+            padding: 30px;
+            border: 1px solid rgba(234, 179, 8, 0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+
+        .wc-text-content {
+            z-index: 2;
+            max-width: 60%;
+        }
+
+        .wc-badge {
+            display: inline-block;
+            background: #eab308;
+            color: #000;
+            font-weight: bold;
+            font-size: 12px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 0 15px rgba(234, 179, 8, 0.4);
+        }
+
+        .wc-text-content h2 {
+            color: #ffffff;
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .wc-text-content h2 span {
+            color: #eab308;
+        }
+
+        .wc-stage {
+            position: relative;
+            width: 300px;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .wc-trophy {
+            font-size: 70px;
+            z-index: 2;
+            filter: drop-shadow(0 0 15px rgba(234, 179, 8, 0.6));
+            animation: floatTrophy 3s ease-in-out infinite alternate;
+        }
+
+        .wc-ball {
+            font-size: 30px;
+            position: absolute;
+            left: 40px;
+            bottom: 20px;
+            z-index: 2;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+            animation: bounceBall 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite alternate, rotateBall 3s linear infinite;
+        }
+
+        .wc-glow {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle, rgba(234, 179, 8, 0.25) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: pulseGlow 2s infinite alternate;
+        }
+
+        @keyframes floatTrophy { 0% { transform: translateY(5px) rotate(-3deg); } 100% { transform: translateY(-15px) rotate(3deg); } }
+        @keyframes bounceBall { 0% { bottom: 15px; transform: scaleY(0.85); } 15% { transform: scaleY(1); } 100% { bottom: 95px; } }
+        @keyframes rotateBall { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes pulseGlow { 0% { transform: scale(0.8); opacity: 0.5; } 100% { transform: scale(1.3); opacity: 1; } }
+
+        /* --- MINI GAMES ARCADE SYSTEM --- */
+        .arcade-section {
+            background: #0f172a;
+            padding: 85px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .arcade-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            background: #1e293b;
+            color: #94a3b8;
+            border-radius: 10px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .tab-btn.active {
+            background: #3b82f6;
+            color: #ffffff;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+        }
+
+        .game-panel {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #111827;
+            padding: 30px;
+            border-radius: 24px;
+            border: 1px solid rgba(255,255,255,0.06);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+
+        .game-panel.active {
+            display: flex;
+        }
+
+        canvas {
+            background: #15803d;
+            border: 4px solid #ffffff;
+            border-radius: 12px;
+            max-width: 100%;
+            box-shadow: inset 0 0 40px rgba(0,0,0,0.2);
+            display: block;
+        }
+
+        #snakeCanvas {
+            background: #020617;
+        }
+
+        .game-controls-hint {
+            margin-top: 15px;
+            color: #94a3b8;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .game-controls-hint span {
+            color: #60a5fa;
+            font-weight: bold;
+        }
+
+        .snake-score-board {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 15px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .snake-score-board span {
+            color: #22c55e;
+        }
+
+        /* ---------------------------- */
 
         section {
             padding: 85px 0;
@@ -309,6 +531,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             border-radius: 20px;
             padding: 24px;
             transition: 0.3s;
+            display: block;
         }
 
         .skill-card:hover {
@@ -350,25 +573,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             background: #111827;
             border-radius: 22px;
             overflow: hidden;
-border: 1px solid rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.06);
             transition: 0.3s;
         }
 
         .project-card:hover {
             transform: translateY(-6px);
             border-color: rgba(96,165,250,0.25);
-        }
-
-        .project-image {
-            height: 210px;
-            overflow: hidden;
-            background: #1f2937;
-        }
-
-        .project-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
         }
 
         .project-content {
@@ -473,43 +684,35 @@ border: 1px solid rgba(255,255,255,0.06);
         }
 
         @media (max-width: 900px) {
-            .hero-content,
-            .about-grid,
-            .contact-grid {
+            .hero-content, .about-grid, .contact-grid, .wc-container {
                 grid-template-columns: 1fr;
-            }
-
-            nav {
                 flex-direction: column;
-                gap: 14px;
+                text-align: center;
             }
 
-            nav ul {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            .hero-text h1 {
-                font-size: 40px;
-            }
+            .wc-text-content { max-width: 100%; margin-bottom: 20px; }
+            nav { flex-direction: column; gap: 14px; }
+            nav ul { flex-wrap: wrap; justify-content: center; }
+            .hero-text h1 { font-size: 40px; }
         }
 
         @media (max-width: 600px) {
-            .hero-text h1 {
-                font-size: 32px;
-            }
-
-            .section-title h2 {
-                font-size: 30px;
-            }
-
-            .quick-info {
-                grid-template-columns: 1fr;
-            }
+            .hero-text h1 { font-size: 32px; }
+            .section-title h2 { font-size: 30px; }
+            .quick-info { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
+
+<div id="welcomePopUp" class="welcome-overlay">
+    <div class="welcome-card">
+        <span class="welcome-icon">🏆</span>
+        <h2>Welcome to <span>MyPortfolio</span></h2>
+        <p>Explore my IT school work, live coding skills, and custom browser-based arcade engines!</p>
+        <button class="btn btn-primary" onclick="enterWebsite()">Enter & Play Whistle ⚽</button>
+    </div>
+</div>
 
 <header>
     <div class="container">
@@ -519,6 +722,7 @@ border: 1px solid rgba(255,255,255,0.06);
                 <li><a href="#home">Home</a></li>
                 <li><a href="#about">About</a></li>
                 <li><a href="#skills">Skills</a></li>
+                <li><a href="#arcade">Arcade Games</a></li>
                 <li><a href="#projects">Projects</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
@@ -527,7 +731,7 @@ border: 1px solid rgba(255,255,255,0.06);
 </header>
 
 <section class="hero" id="home">
-<div class="container hero-content">
+    <div class="container hero-content">
         <div class="hero-text">
             <span class="small-title">Student Portfolio Website</span>
             <h1>Hello, I'm <span>Bunthoeurn Thearith</span></h1>
@@ -537,14 +741,13 @@ border: 1px solid rgba(255,255,255,0.06);
             </p>
             <div class="btn-group">
                 <a href="#projects" class="btn btn-primary">See My Projects</a>
-                <a href="#contact" class="btn btn-secondary">Hire / Contact Me</a>
+                <a href="#arcade" class="btn btn-secondary">Play Arcade Games</a>
             </div>
         </div>
 
         <div class="hero-card">
             <div class="profile-image">
-              <img src="https://lh3.googleusercontent.com/a/ACg8ocJxND8bHVbiA28TGb_14l_iDCdp6J17w8Iyp2CMYH-TmvcE_fQ=s400-c">
-                
+                <img src="https://lh3.googleusercontent.com/a/ACg8ocJxND8bHVbiA28TGb_14l_iDCdp6J17w8Iyp2CMYH-TmvcE_fQ=s400-c" alt="Profile Picture">
             </div>
             <h3>Bunthoeurn Thearith</h3>
             <p>Student • Web Learner • Future Developer</p>
@@ -571,13 +774,58 @@ border: 1px solid rgba(255,255,255,0.06);
     </div>
 </section>
 
+<div class="worldcup-section">
+    <div class="container wc-container">
+        <div class="wc-text-content">
+            <span class="wc-badge">Live Hobby Feature</span>
+            <h2>Football & <span>World Cup</span> Passion</h2>
+            <p>Outside of writing code, I follow global sports engineering and data analytics. Counting down to the grandest tournament on earth!</p>
+        </div>
+        <div class="wc-stage">
+            <div class="wc-glow"></div>
+            <div class="wc-ball">⚽</div>
+            <div class="wc-trophy">🏆</div>
+        </div>
+    </div>
+</div>
+
+<section id="arcade" class="arcade-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>Interactive JavaScript Arcade Center</h2>
+            <p>Explore games completely rendered using the HTML5 Canvas API, showing execution loop engines and coordinates calculation.</p>
+        </div>
+        
+        <div class="arcade-tabs">
+            <button class="btn tab-btn active" onclick="switchGame('football')">⚽ Football Game</button>
+            <button class="btn tab-btn" onclick="switchGame('snake')">🐍 Snake Game</button>
+        </div>
+
+        <div id="footballPanel" class="game-panel active">
+            <canvas id="footballCanvas" width="700" height="400"></canvas>
+            <div class="game-controls-hint">
+                Controls: Use <span>W / S</span> keys or <span>Up / Down Arrow</span> keys to move your blue paddle.
+            </div>
+        </div>
+
+        <div id="snakePanel" class="game-panel">
+            <div class="snake-score-board">
+                <div>Score: <span id="currentSnakeScore">0</span></div>
+                <div>High Score: <span id="highSnakeScore">0</span></div>
+            </div>
+            <canvas id="snakeCanvas" width="400" height="400"></canvas>
+            <div class="game-controls-hint">
+                Controls: Use <span>Arrow Keys</span> or <span>W, A, S, D</span> to drive the snake. Do not hit the walls or your own tail!
+            </div>
+        </div>
+    </div>
+</section>
+
 <section id="about">
     <div class="container">
         <div class="section-title">
             <h2>About Me</h2>
-            <p>
-                A short introduction about who I am, my education, and what I want to achieve in the future.
-            </p>
+            <p>A short introduction about who I am, my education, and what I want to achieve in the future.</p>
         </div>
 
         <div class="about-grid">
@@ -596,12 +844,12 @@ border: 1px solid rgba(255,255,255,0.06);
             <div class="card">
                 <h3>Student Information</h3>
                 <ul class="info-list">
-                    <li><strong>Full Name:</strong>Bunthoeurn Thearith </li>
+                    <li><strong>Full Name:</strong> Bunthoeurn Thearith</li>
                     <li><strong>Major:</strong> Information Technology</li>
                     <li><strong>Level:</strong> University Student</li>
                     <li><strong>Email:</strong> Riththeaaa@gmail.com</li>
                     <li><strong>Phone:</strong> +855 088 751 2032</li>
-                    <li><strong>Address:</strong> SeiseSoaphon Beanteay MeancheyCambodia</li>
+                    <li><strong>Address:</strong> Serei Saophoan, Banteay Meanchey, Cambodia</li>
                 </ul>
             </div>
         </div>
@@ -612,35 +860,32 @@ border: 1px solid rgba(255,255,255,0.06);
     <div class="container">
         <div class="section-title">
             <h2>My Skills</h2>
-            <p>
-                These are some skills I am currently learning and practicing.
-            </p>
+            <p>These are some skills I am currently learning and practicing.</p>
         </div>
 
         <div class="skills-grid">
-            <div class="skill-card">
-                <a href="Html.html">
+            <a href="Html.html" class="skill-card">
                 <h3>HTML</h3>
                 <p>I can build structured and responsive web page layouts.</p>
                 <div class="skill-bar">
                     <div class="skill-fill" style="width: 90%;"></div>
                 </div>
-            </a></div> 
-            <a href="Examit.html">
-            <div class="skill-card">
-                <h3>Electrcity</h3>
-                <p></p>
+            </a>
+
+            <a href="Examit.html" class="skill-card">
+                <h3>PHP</h3>
+                <p>PHP can be used to create dynamic web applications and server-side logic.</p>
                 <div class="skill-bar">
                     <div class="skill-fill" style="width: 75%;"></div>
                 </div>
-            </div></a>
+            </a>
 
             <div class="skill-card">
                 <h3>UI Design</h3>
                 <p>I enjoy creating clean and modern user interface designs.</p>
                 <div class="skill-bar">
                     <div class="skill-fill" style="width: 70%;"></div>
-</div>
+                </div>
             </div>
 
             <div class="skill-card">
@@ -658,70 +903,55 @@ border: 1px solid rgba(255,255,255,0.06);
     <div class="container">
         <div class="section-title">
             <h2>My Projects</h2>
-            <p>
-                Some example projects that show my learning and portfolio work.
-            </p>
+            <p>Some example projects that show my learning and portfolio work.</p>
         </div>
 
         <div class="projects-grid">
             <div class="project-card">
-                
                 <a href="DataType&Syntax.html">
-                <div class="project-content">
-                    <h3>Data type and Syntax (PHP)</h3>
-                    <p>
-                        តើ Data type នៅក្នុង PHP មានអ្វីខ្លះ?
-                    </p>
-                    <span class="project-tag">Data type</span>
-                    <span class="project-tag">Syntax</span>
-                    
-               </div></a>
+                    <div class="project-content">
+                        <h3>Data type and Syntax (PHP)</h3>
+                        <p>តើ Data type នៅក្នុង PHP មានអ្វីខ្លះ?</p>
+                        <span class="project-tag">Data type</span>
+                        <span class="project-tag">Syntax</span>
+                    </div>
+                </a>
             </div>
-            <div class="projects-grid">
+
             <div class="project-card">
-                
                 <a href="Examit.html">
-                <div class="project-content">
-                    <h3>Electrcity (PHP)</h3>
-                    <p>
-                        គណនាថ្លៃភ្លើង
-                    </p>
-                    <span class="project-tag"></span>
-                    <span class="project-tag"></span>
-                    
-               </div></a>
-            </div>
-
-            <div class="project-card">  
-                
-                <a href="ResultCalculator.html">
-                <div class="project-content">
-                    <h3>Calcual Result Student
-                    </h3>
-                    <p>
-                        For student who want to calculate the result of their score and grade in a simple way.
-
-                    </p>
-                    <span class="project-tag">Absences</span>
-                    <span class="project-tag">Midterm_Score</span>
-                    <span class="project-tag">Final_Score</span>
-                </div></a>
+                    <div class="project-content">
+                        <h3>Electricity (PHP)</h3>
+                        <p>គណនាថ្លៃភ្លើង</p>
+                        <span class="project-tag">Calculation</span>
+                        <span class="project-tag">Logic</span>
+                    </div>
+                </a>
             </div>
 
             <div class="project-card">
-                
-                <div class="project-content">
-                    <a href="PhoneFortune.html">
-                    <h3>PhoneFortune</h3>
-                    <p>
-                        កម្មវិធីទស្សន៍ទាយជោគជតារាសីតាមលេខទូរស័ព្ទ (បែបចិន) 
-                    </p>
-                    <span class="project-tag">PHP</span>
-                    <span class="project-tag"></span>
-                    <span class="project-tag"></span>
-                </div>
+                <a href="ResultCalculator.html">
+                    <div class="project-content">
+                        <h3>Calculate Result Student</h3>
+                        <p>For students who want to calculate the result of their score and grade in a simple way.</p>
+                        <span class="project-tag">Absences</span>
+                        <span class="project-tag">Midterm_Score</span>
+                        <span class="project-tag">Final_Score</span>
+                    </div>
+                </a>
             </div>
-        </div></a>
+
+            <div class="project-card">
+                <a href="PhoneFortune.html">
+                    <div class="project-content">
+                        <h3>PhoneFortune</h3>
+                        <p>កម្មវិធីទស្សន៍ទាយជោគជតារាសីតាមលេខទូរស័ព្ទ (បែបចិន)</p>
+                        <span class="project-tag">PHP</span>
+                        <span class="project-tag">Fun Build</span>
+                    </div>
+                </a>
+            </div>
+        </div>
     </div>
 </section>
 
@@ -729,22 +959,18 @@ border: 1px solid rgba(255,255,255,0.06);
     <div class="container">
         <div class="section-title">
             <h2>Contact Me</h2>
-            <p>
-                Send me a message through the form below.
-            </p>
+            <p>Send me a message through the form below.</p>
         </div>
 
         <div class="contact-grid">
             <div class="card contact-info">
                 <h3>Let's Connect</h3>
-                <p><strong>Email:</strong> Riththeaaa@example.com</p>
-                <p><strong>Phone:</strong> +855 887 512 032</p>
-                <p><strong>Location:</strong> Cambodia</p>
+                <p><strong>Email:</strong> Riththeaaa@gmail.com</p>
+                <p><strong>Phone:</strong> +855 088 751 2032</p>
+                <p><strong>Location:</strong> Serei Saophoan, Cambodia</p>
                 <p><strong>Status:</strong> Available for student projects and collaboration</p>
                 <br>
-                <p>
-                    You can contact me for project discussion, teamwork, learning opportunities, or portfolio feedback.
-                </p>
+                <p>You can contact me for project discussion, teamwork, learning opportunities, or portfolio feedback.</p>
             </div>
 
             <div class="card">
@@ -761,22 +987,22 @@ border: 1px solid rgba(255,255,255,0.06);
                 <form method="POST" action="">
                     <div class="form-group">
                         <label for="name">Full Name</label>
-<input type="text" id="name" name="name" value=" ">
+                        <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($name); ?>">
                     </div>
 
                     <div class="form-group">
                         <label for="email">Email Address</label>
-                        <input type="text" id="email" name="email" value="">
+                        <input type="text" id="email" name="email" value="<?php echo htmlspecialchars($email); ?>">
                     </div>
 
                     <div class="form-group">
                         <label for="subject">Subject</label>
-                        <input type="text" id="subject" name="subject" value="">
+                        <input type="text" id="subject" name="subject" value="<?php echo htmlspecialchars($subject); ?>">
                     </div>
 
                     <div class="form-group">
                         <label for="message">Message</label>
-                        <textarea id="message" name="message"></textarea>
+                        <textarea id="message" name="message"><?php echo htmlspecialchars($message); ?></textarea>
                     </div>
 
                     <button type="submit" class="btn btn-primary">Send Message</button>
@@ -788,11 +1014,266 @@ border: 1px solid rgba(255,255,255,0.06);
 
 <footer>
     <div class="container">
-        <p>&copy; <?php echo date("Y"); ?> Student Portfolio. All rights reserved.</p>
+        <p>© <?php echo date("Y"); ?> Student Portfolio. All rights reserved.</p>
     </div>
 </footer>
 
-</body>
-</html>
+<script>
+    const whistleSound = new Audio("https://actions.google.com/sounds/v1/sports/referee_whistle_blow.ogg");
+
+    function playWhistle() {
+        whistleSound.currentTime = 0; 
+        whistleSound.play().catch(err => console.log("Audio waiting for user click interaction: ", err));
+    }
+
+    // --- WELCOME INTERACTION LOADER ---
+    // Triggers the sound the split second they accept and enter the site
+    function enterWebsite() {
+        const overlay = document.getElementById("welcomePopUp");
+        overlay.style.opacity = "0";
+        setTimeout(() => {
+            overlay.style.display = "none";
+        }, 500);
+        
+        playWhistle(); // Triggers whistle blow sound instantly on join!
+    }
+
+    // Tab Controller
+    function switchGame(gameType) {
+        document.getElementById("footballPanel").classList.remove("active");
+        document.getElementById("snakePanel").classList.remove("active");
+        
+        const buttons = document.querySelectorAll(".tab-btn");
+        buttons.forEach(btn => btn.classList.remove("active"));
+
+        if(gameType === 'football') {
+            document.getElementById("footballPanel").classList.add("active");
+            event.target.classList.add("active");
+        } else {
+            document.getElementById("snakePanel").classList.add("active");
+            event.target.classList.add("active");
+            initSnakeGame(); 
+        }
+    }
+
+    /* ================= FOOTBALL ENGINE ================= */
+    const fbCanvas = document.getElementById("footballCanvas");
+    const fbCtx = fbCanvas.getContext("2d");
+
+    const ball = { x: fbCanvas.width / 2, y: fbCanvas.height / 2, radius: 10, speed: 5, dx: 5, dy: 5 };
+    const player = { x: 15, y: fbCanvas.height / 2 - 40, width: 12, height: 80, score: 0, speed: 6 };
+    const ai = { x: fbCanvas.width - 27, y: fbCanvas.height / 2 - 40, width: 12, height: 80, score: 0, speed: 3.5 };
+
+    const keys = {};
+    window.addEventListener("keydown", (e) => { 
+        keys[e.key] = true; 
+        if(["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "].includes(e.key)) {
+            e.preventDefault();
+        }
+    });
+    window.addEventListener("keyup", (e) => { keys[e.key] = false; });
+
+    function drawFootballField() {
+        fbCtx.strokeStyle = "rgba(255,255,255,0.4)";
+        fbCtx.lineWidth = 4;
+        fbCtx.beginPath();
+        fbCtx.moveTo(fbCanvas.width / 2, 0);
+        fbCtx.lineTo(fbCanvas.width / 2, fbCanvas.height);
+        fbCtx.stroke();
+
+        fbCtx.beginPath();
+        fbCtx.arc(fbCanvas.width / 2, fbCanvas.height / 2, 60, 0, Math.PI * 2);
+        fbCtx.stroke();
+    }
+
+    function drawPaddle(paddle, color) {
+        fbCtx.fillStyle = color;
+        fbCtx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
+    }
+
+    function drawFootballBall() {
+        fbCtx.fillStyle = "#ffffff";
+        fbCtx.beginPath();
+        fbCtx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+        fbCtx.fill();
+    }
+
+    function drawFootballScores() {
+        fbCtx.fillStyle = "#ffffff";
+        fbCtx.font = "bold 32px Arial";
+        fbCtx.fillText(player.score, fbCanvas.width / 4, 50);
+        fbCtx.fillText(ai.score, (fbCanvas.width / 4) * 3, 50);
+    }
+
+    function resetFootballBall(scoringPaddle) {
+        playWhistle(); 
+        ball.x = fbCanvas.width / 2;
+        ball.y = fbCanvas.height / 2;
+        ball.dx = scoringPaddle === player ? -5 : 5;
+        ball.dy = (Math.random() > 0.5 ? 1 : -1) * 3;
+    }
+
+    function updateFootball() {
+        if (keys["ArrowUp"] || keys["w"] || keys["W"]) player.y = Math.max(0, player.y - player.speed);
+        if (keys["ArrowDown"] || keys["s"] || keys["S"]) player.y = Math.min(fbCanvas.height - player.height, player.y + player.speed);
+
+        let aiTarget = ball.y - ai.height / 2;
+        if (ai.y < aiTarget) ai.y += Math.min(ai.speed, aiTarget - ai.y);
+        else if (ai.y > aiTarget) ai.y -= Math.min(ai.speed, ai.y - aiTarget);
+
+        ball.x += ball.dx;
+        ball.y += ball.dy;
+
+        if (ball.y - ball.radius <= 0 || ball.y + ball.radius >= fbCanvas.height) ball.dy *= -1;
+
+        if (ball.x < 0) { ai.score++; resetFootballBall(ai); }
+        else if (ball.x > fbCanvas.width) { player.score++; resetFootballBall(player); }
+
+        let currentPaddle = (ball.x < fbCanvas.width / 2) ? player : ai;
+        if (ball.x - ball.radius < currentPaddle.x + currentPaddle.width &&
+            ball.x + ball.radius > currentPaddle.x &&
+            ball.y + ball.radius > currentPaddle.y &&
+            ball.y - ball.radius < currentPaddle.y + currentPaddle.height) {
+            ball.dx *= -1.05;
+            let relativeIntersectY = (currentPaddle.y + (currentPaddle.height / 2)) - ball.y;
+            ball.dy = -(relativeIntersectY / (currentPaddle.height / 2)) * 5;
+        }
+    }
+
+    function footballLoop() {
+        fbCtx.clearRect(0, 0, fbCanvas.width, fbCanvas.height);
+        drawFootballField();
+        drawPaddle(player, "#3b82f6");
+        drawPaddle(ai, "#ef4444");
+        drawFootballBall();
+        drawFootballScores();
+        updateFootball();
+        requestAnimationFrame(footballLoop);
+    }
+    footballLoop();
+
+    /* ================= SNAKE GAME ENGINE ================= */
+    const snakeCanvas = document.getElementById("snakeCanvas");
+    const snakeCtx = snakeCanvas.getContext("2d");
+
+    const gridSize = 20;
+    const tileCount = snakeCanvas.width / gridSize;
+    
+    let snake = [];
+    let food = { x: 0, y: 0 };
+    let dx = gridSize;
+    let dy = 0;
+    let snakeScore = 0;
+    let snakeHighScore = 0;
+    let snakeGameInterval = null;
+
+    function initSnakeGame() {
+        if(snakeGameInterval) clearInterval(snakeGameInterval);
+        snake = [
+            { x: gridSize * 5, y: gridSize * 10 },
+            { x: gridSize * 4, y: gridSize * 10 },
+            { x: gridSize * 3, y: gridSize * 10 }
+        ];
+        dx = gridSize;
+        dy = 0;
+        snakeScore = 0;
+        document.getElementById("currentSnakeScore").innerText = snakeScore;
+        generateFood();
+        snakeGameInterval = setInterval(updateSnake, 100);
+    }
+
+    function generateFood() {
+        food.x = Math.floor(Math.random() * tileCount) * gridSize;
+        food.y = Math.floor(Math.random() * tileCount) * gridSize;
+        snake.forEach(part => {
+            if(part.x === food.x && part.y === food.y) generateFood();
+        });
+    }
+
+    function updateSnake() {
+        const head = { x: snake[0].x + dx, y: snake[0].y + dy };
+        
+        if (head.x < 0 || head.x >= snakeCanvas.width || head.y < 0 || head.y >= snakeCanvas.height) {
+            handleGameOver();
+            return;
+        }
+
+        for (let i = 0; i < snake.length; i++) {
+            if (snake[i].x === head.x && snake[i].y === head.y) {
+                handleGameOver();
+                return;
+            }
+        }
+
+        snake.unshift(head);
+
+        if (head.x === food.x && head.y === food.y) {
+            snakeScore += 10;
+            document.getElementById("currentSnakeScore").innerText = snakeScore;
+            if(snakeScore > snakeHighScore) {
+                snakeHighScore = snakeScore;
+                document.getElementById("highSnakeScore").innerText = snakeHighScore;
+            }
+            generateFood();
+        } else {
+            snake.pop();
+        }
+
+        drawSnakeGame();
+    }
+
+    function drawSnakeGame() {
+        snakeCtx.fillStyle = "#020617";
+        snakeCtx.fillRect(0, 0, snakeCanvas.width, snakeCanvas.height);
+
+        snakeCtx.fillStyle = "#ef4444";
+        snakeCtx.beginPath();
+        snakeCtx.arc(food.x + gridSize/2, food.y + gridSize/2, gridSize/2 - 2, 0, Math.PI * 2);
+        snakeCtx.fill();
+
+        snake.forEach((part, index) => {
+            snakeCtx.fillStyle = index === 0 ? "#22c55e" : "#4ade80";
+            snakeCtx.fillRect(part.x + 1, part.y + 1, gridSize - 2, gridSize - 2);
+        });
+    }
+
+    function handleGameOver() {
+        playWhistle(); 
+        clearInterval(snakeGameInterval);
+        snakeCtx.fillStyle = "rgba(0, 0, 0, 0.75)";
+        snakeCtx.fillRect(0, 0, snakeCanvas.width, snakeCanvas.height);
+        
+        snakeCtx.fillStyle = "#ffffff";
+        snakeCtx.font = "bold 28px Arial";
+        snakeCtx.textAlign = "center";
+        snakeCtx.fillText("Game Over!", snakeCanvas.width / 2, snakeCanvas.height / 2 - 10);
+        
+        snakeCtx.font = "16px Arial";
+        snakeCtx.fillStyle = "#94a3b8";
+        snakeCtx.fillText("Press any Arrow Key / WASD to Restart", snakeCanvas.width / 2, snakeCanvas.height / 2 + 20);
+    }
+
+    window.addEventListener("keydown", (e) => {
+        const goingUp = dy === -gridSize;
+        const goingDown = dy === gridSize;
+        const goingRight = dx === gridSize;
+        const goingLeft = dx === -gridSize;
+
+        if(["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "w", "a", "s", "d", "W", "A", "S", "D"].includes(e.key)) {
+            if(!snakeGameInterval || snake.length === 0) {
+                if(document.getElementById("snakePanel").classList.contains("active")) {
+                    initSnakeGame();
+                    return;
+                }
+            }
+        }
+
+        if ((e.key === "ArrowUp" || e.key === "w" || e.key === "W") && !goingDown) { dx = 0; dy = -gridSize; }
+        if ((e.key === "ArrowDown" || e.key === "s" || e.key === "S") && !goingUp) { dx = 0; dy = gridSize; }
+        if ((e.key === "ArrowLeft" || e.key === "a" || e.key === "A") && !goingRight) { dx = -gridSize; dy = 0; }
+        if ((e.key === "ArrowRight" || e.key === "d" || e.key === "D") && !goingLeft) { dx = gridSize; dy = 0; }
+    });
+</script>
+
 </body>
 </html>
