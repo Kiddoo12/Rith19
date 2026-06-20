@@ -1,35 +1,14 @@
-<?php
-$success = "";
-$error = "";
-
-$name = "";
-$email = "";
-$subject = "";
-$message = "";
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $name = trim(htmlspecialchars($_POST["name"] ?? ""));
-    $email = trim(htmlspecialchars($_POST["email"] ?? ""));
-    $subject = trim(htmlspecialchars($_POST["subject"] ?? ""));
-    $message = trim(htmlspecialchars($_POST["message"] ?? ""));
-
-    if (empty($name) || empty($email) || empty($subject) || empty($message)) {
-        $error = "Please fill in all fields.";
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $error = "Please enter a valid email address.";
-    } else {
-        $success = "Thank you, $name! Your message has been received successfully.";
-        // Reset fields on successful validation
-        $name = $email = $subject = $message = "";
-    }
-}
-?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="km">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Student Portfolio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portfolio & Arcade Node</title>
+    <!-- Importing modern clean Khmer & English fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:ital,wght@0,100..700;1,100..700&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+    
     <style>
         * {
             margin: 0;
@@ -39,10 +18,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         body {
-            font-family: Arial, sans-serif;
-            background: #0b1120;
-            color: #e5e7eb;
-            line-height: 1.6;
+            font-family: "Kantumruy Pro", "Plus Jakarta Sans", Arial, sans-serif;
+            background: #03050c;
+            color: #e2e8f0;
+            line-height: 1.7;
             overflow-x: hidden;
         }
 
@@ -66,63 +45,131 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             margin: auto;
         }
 
-        /* --- WELCOME AUDIO OVERLAY POP-UP --- */
-        .welcome-overlay {
+        /* --- DEEPER KBACH KHMER ARTISTIC THEME SYSTEM --- */
+        :root {
+            --khmer-gold: linear-gradient(135deg, #ffd700 0%, #b45309 50%, #ffd700 100%);
+            --solid-gold: #eab308;
+            --bright-gold: #fde047;
+            --khmer-gold-glow: rgba(234, 179, 8, 0.3);
+            --dark-surface: #060a14;
+            --dark-card: #0e1726;
+        }
+
+        /* Ambient Traditional Khmer Angkorean Grid Pattern Background */
+        body::before {
+            content: '';
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(7, 11, 22, 0.98);
-            z-index: 9999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            transition: 0.5s ease-out;
+            inset: 0;
+            background-image: 
+                radial-gradient(rgba(234, 179, 8, 0.02) 2px, transparent 2px),
+                linear-gradient(45deg, rgba(234, 179, 8, 0.01) 25%, transparent 25%, transparent 75%, rgba(234, 179, 8, 0.01) 75%, rgba(234, 179, 8, 0.01)),
+                linear-gradient(45deg, rgba(234, 179, 8, 0.01) 25%, #03050c 25%, #03050c 75%, rgba(234, 179, 8, 0.01) 75%, rgba(234, 179, 8, 0.01));
+            background-size: 30px 30px, 60px 60px, 60px 60px;
+            background-position: 0 0, 0 0, 30px 30px;
+            z-index: -1;
+            pointer-events: none;
         }
 
-        .welcome-card {
-            background: linear-gradient(145deg, #111827, #0f172a);
-            border: 2px solid #eab308;
-            border-radius: 24px;
-            padding: 40px;
-            text-align: center;
-            max-width: 450px;
-            width: 90%;
-            box-shadow: 0 20px 50px rgba(234, 179, 8, 0.15);
+        /* Complex Interlapping Kbach Divider (Kbach Chouk Style) */
+        .kbach-divider {
+            height: 24px;
+            width: 100%;
+            background: 
+                radial-gradient(circle at 50% 100%, transparent 8px, var(--solid-gold) 8px, var(--solid-gold) 10px, transparent 10px),
+                radial-gradient(circle at 50% 0%, transparent 8px, var(--solid-gold) 8px, var(--solid-gold) 10px, transparent 10px);
+            background-size: 20px 12px;
+            background-repeat: repeat-x;
+            opacity: 0.4;
+            margin: 40px 0;
+            filter: drop-shadow(0 0 4px var(--khmer-gold-glow));
         }
 
-        .welcome-card h2 {
-            color: #ffffff;
+        /* High-End Architectural Khmer Frame (Chanthor Kbach Framework) */
+        .kbach-frame {
+            position: relative;
+            background: linear-gradient(180deg, #0b1220 0%, #060a14 100%);
+            border: 2px solid #a16207;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(234, 179, 8, 0.05);
+            border-radius: 4px; /* Classic flat edge structure */
+        }
+
+        /* Sharp Roof Peak Points (Chfa Accents) at top left/right */
+        .kbach-frame::before {
+            content: 'ឝ';
+            position: absolute;
+            top: -24px; left: -8px;
+            color: var(--solid-gold);
             font-size: 28px;
-            margin-bottom: 15px;
+            font-weight: normal;
+            text-shadow: 0 -2px 10px var(--khmer-gold-glow);
+        }
+        .kbach-frame::after {
+            content: 'ឞ';
+            position: absolute;
+            top: -24px; right: -8px;
+            color: var(--solid-gold);
+            font-size: 28px;
+            font-weight: normal;
+            text-shadow: 0 -2px 10px var(--khmer-gold-glow);
         }
 
-        .welcome-card h2 span {
-            color: #60a5fa;
+        /* Traditional Angkorean Corner Pediment Fillers */
+        .kbach-corners {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            border-radius: inherit;
+        }
+        .kbach-corners::before {
+            content: '៚';
+            position: absolute;
+            bottom: -2px; left: 4px;
+            color: #78350f;
+            font-size: 14px;
+            opacity: 0.7;
+        }
+        .kbach-corners::after {
+            content: '៚';
+            position: absolute;
+            bottom: -2px; right: 4px;
+            color: #78350f;
+            font-size: 14px;
+            opacity: 0.7;
+            transform: scaleX(-1);
         }
 
-        .welcome-card p {
-            color: #94a3b8;
-            font-size: 15px;
-            margin-bottom: 25px;
+        /* Decorative Golden Leaf Layer for Card Headers */
+        .kbach-card-head {
+            position: relative;
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+            border-bottom: 1px solid rgba(234, 179, 8, 0.2);
         }
-
-        .welcome-icon {
-            font-size: 50px;
-            margin-bottom: 15px;
-            display: inline-block;
-            animation: pulseGlow 2s infinite alternate;
+        .kbach-card-head::after {
+            content: '♣';
+            position: absolute;
+            bottom: -7px; left: 0;
+            color: var(--solid-gold);
+            font-size: 12px;
+            filter: rotate(45deg);
         }
 
         header {
             position: sticky;
             top: 0;
             z-index: 1000;
-            background: rgba(11, 17, 32, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255,255,255,0.08);
+            background: rgba(3, 5, 12, 0.95);
+            backdrop-filter: blur(16px);
+            border-bottom: 3px solid #ca8a04;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        header::after {
+            content: '';
+            display: block;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--solid-gold), transparent);
         }
 
         nav {
@@ -134,121 +181,133 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         .logo {
             font-size: 28px;
-            font-weight: bold;
-            color: #60a5fa;
-            letter-spacing: 1px;
+            font-weight: 900;
+            background: var(--khmer-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 15px rgba(234, 179, 8, 0.2);
         }
 
         nav ul {
             display: flex;
-            gap: 22px;
+            gap: 24px;
         }
 
         nav ul li a {
-            color: #dbeafe;
+            color: #94a3b8;
             font-size: 15px;
-            transition: 0.3s;
+            font-weight: 600;
+            transition: all 0.3s ease;
         }
 
         nav ul li a:hover {
-            color: #60a5fa;
+            color: var(--solid-gold);
+            text-shadow: 0 0 8px var(--khmer-gold-glow);
         }
 
+        /* --- HERO SECTION --- */
         .hero {
-            padding: 90px 0 70px;
-            background:
-                radial-gradient(circle at top left, rgba(59,130,246,0.25), transparent 30%),
-                radial-gradient(circle at bottom right, rgba(14,165,233,0.18), transparent 30%),
-                #0b1120;
+            padding: 110px 0 90px;
+            position: relative;
         }
 
         .hero-content {
             display: grid;
             grid-template-columns: 1.2fr 0.8fr;
-            gap: 40px;
+            gap: 50px;
             align-items: center;
         }
 
         .hero-text .small-title {
             display: inline-block;
-            padding: 8px 16px;
-            border-radius: 30px;
-            background: rgba(96,165,250,0.12);
-            color: #93c5fd;
-            font-size: 14px;
-            margin-bottom: 18px;
+            padding: 6px 18px;
+            background: rgba(234, 179, 8, 0.08);
+            color: var(--solid-gold);
+            font-size: 13px;
+            font-weight: 700;
+            border: 1px solid rgba(234, 179, 8, 0.3);
+            border-radius: 2px;
+            letter-spacing: 0.5px;
+            margin-bottom: 22px;
         }
 
         .hero-text h1 {
             font-size: 54px;
-            line-height: 1.15;
-            margin-bottom: 18px;
+            line-height: 1.25;
+            margin-bottom: 22px;
             color: #ffffff;
+            font-weight: 700;
+            letter-spacing: -0.5px;
         }
 
         .hero-text h1 span {
-            color: #60a5fa;
+            background: var(--khmer-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
         }
 
         .hero-text p {
             max-width: 600px;
-            color: #cbd5e1;
+            color: #94a3b8;
             font-size: 17px;
-            margin-bottom: 28px;
+            margin-bottom: 40px;
         }
 
         .btn-group {
             display: flex;
-            gap: 15px;
+            gap: 16px;
             flex-wrap: wrap;
         }
 
         .btn {
-            padding: 13px 24px;
-            border-radius: 12px;
-            font-weight: bold;
+            padding: 15px 32px;
+            font-weight: 700;
+            font-size: 15px;
             display: inline-block;
-            transition: 0.3s;
+            transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
             cursor: pointer;
+            border-radius: 4px;
             border: none;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #3b82f6, #06b6d4);
-            color: white;
-            box-shadow: 0 10px 25px rgba(59,130,246,0.25);
+            background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
+            color: #03050c;
+            box-shadow: 0 6px 20px rgba(234, 179, 8, 0.3);
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 28px rgba(234, 179, 8, 0.5);
+            background: linear-gradient(135deg, #fde047 0%, #eab308 100%);
         }
 
         .btn-secondary {
-            border: 1px solid rgba(255,255,255,0.15);
-            background: rgba(255,255,255,0.04);
-            color: #e5e7eb;
+            border: 1px solid #ca8a04;
+            background: rgba(234, 179, 8, 0.02);
+            color: var(--solid-gold);
         }
 
         .btn-secondary:hover {
-            background: rgba(255,255,255,0.08);
+            background: rgba(234, 179, 8, 0.12);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(234, 179, 8, 0.15);
         }
 
         .hero-card {
-            background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 24px;
-            padding: 30px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+            padding: 45px 30px;
         }
 
         .profile-image {
-            width: 220px;
-            height: 220px;
-            margin: 0 auto 20px;
-            border-radius: 24px;
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 30px;
+            border-radius: 50%;
             overflow: hidden;
-            border: 3px solid rgba(96,165,250,0.35);
-            background: #111827;
+            border: 4px solid var(--solid-gold);
+            box-shadow: 0 0 30px rgba(234, 179, 8, 0.4);
+            background: #0b1220;
         }
 
         .profile-image img {
@@ -259,43 +318,50 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         .hero-card h3 {
             text-align: center;
-            font-size: 28px;
+            font-size: 26px;
             color: #ffffff;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
+            font-weight: 700;
         }
 
         .hero-card p {
             text-align: center;
-            color: #cbd5e1;
-            margin-bottom: 20px;
+            color: var(--solid-gold);
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 28px;
         }
 
         .quick-info {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
+            gap: 14px;
         }
 
         .quick-info div {
-            background: rgba(255,255,255,0.04);
-            border-radius: 14px;
+            background: rgba(3, 5, 12, 0.8);
             padding: 14px;
             text-align: center;
+            border: 1px solid rgba(234, 179, 8, 0.15);
+            border-radius: 2px;
         }
 
         .quick-info h4 {
-            color: #60a5fa;
-            font-size: 18px;
-            margin-bottom: 6px;
+            color: #ffffff;
+            font-size: 22px;
+            margin-bottom: 4px;
+            font-weight: 800;
         }
 
-        /* --- WORLD CUP BANNER --- */
+        .quick-info span {
+            color: #64748b;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        /* --- WORLD CUP HOBBY --- */
         .worldcup-section {
-            padding: 40px 0;
-            background: linear-gradient(180deg, #0b1120, #042f2e);
-            border-top: 1px solid rgba(255,255,255,0.05);
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            overflow: hidden;
+            padding: 60px 0;
             position: relative;
         }
 
@@ -303,12 +369,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            position: relative;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 24px;
-            padding: 30px;
-            border: 1px solid rgba(234, 179, 8, 0.2);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            padding: 45px;
         }
 
         .wc-text-content {
@@ -318,26 +379,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         .wc-badge {
             display: inline-block;
-            background: #eab308;
-            color: #000;
-            font-weight: bold;
-            font-size: 12px;
-            padding: 4px 12px;
-            border-radius: 20px;
-            margin-bottom: 10px;
+            background: var(--solid-gold);
+            color: #03050c;
+            font-weight: 800;
+            font-size: 11px;
+            padding: 4px 14px;
+            border-radius: 2px;
+            margin-bottom: 16px;
             text-transform: uppercase;
             letter-spacing: 1px;
-            box-shadow: 0 0 15px rgba(234, 179, 8, 0.4);
+            box-shadow: 0 4px 15px rgba(234, 179, 8, 0.3);
         }
 
         .wc-text-content h2 {
             color: #ffffff;
-            font-size: 28px;
-            margin-bottom: 8px;
+            font-size: 34px;
+            margin-bottom: 12px;
+            font-weight: 700;
         }
 
         .wc-text-content h2 span {
-            color: #eab308;
+            color: var(--solid-gold);
         }
 
         .wc-stage {
@@ -350,366 +412,476 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         .wc-trophy {
-            font-size: 70px;
+            font-size: 75px;
             z-index: 2;
-            filter: drop-shadow(0 0 15px rgba(234, 179, 8, 0.6));
+            filter: drop-shadow(0 0 25px rgba(234, 179, 8, 0.8));
             animation: floatTrophy 3s ease-in-out infinite alternate;
         }
 
         .wc-ball {
-            font-size: 30px;
+            font-size: 32px;
             position: absolute;
             left: 40px;
             bottom: 20px;
             z-index: 2;
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.6));
             animation: bounceBall 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite alternate, rotateBall 3s linear infinite;
         }
 
         .wc-glow {
             position: absolute;
-            width: 120px;
-            height: 120px;
-            background: radial-gradient(circle, rgba(234, 179, 8, 0.25) 0%, transparent 70%);
+            width: 140px;
+            height: 140px;
+            background: radial-gradient(circle, rgba(234, 179, 8, 0.3) 0%, transparent 70%);
             border-radius: 50%;
             animation: pulseGlow 2s infinite alternate;
         }
 
-        @keyframes floatTrophy { 0% { transform: translateY(5px) rotate(-3deg); } 100% { transform: translateY(-15px) rotate(3deg); } }
-        @keyframes bounceBall { 0% { bottom: 15px; transform: scaleY(0.85); } 15% { transform: scaleY(1); } 100% { bottom: 95px; } }
-        @keyframes rotateBall { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @keyframes pulseGlow { 0% { transform: scale(0.8); opacity: 0.5; } 100% { transform: scale(1.3); opacity: 1; } }
+        @keyframes floatTrophy {
+            0% { transform: translateY(5px) rotate(-3deg); }
+            100% { transform: translateY(-15px) rotate(3deg); }
+        }
+        @keyframes bounceBall {
+            0% { bottom: 15px; transform: scaleY(0.8); }
+            15% { transform: scaleY(1); }
+            100% { bottom: 95px; }
+        }
+        @keyframes rotateBall {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes pulseGlow {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            100% { transform: scale(1.3); opacity: 1; }
+        }
 
-        /* --- MINI GAMES ARCADE SYSTEM --- */
+        /* --- RETRO ARCADE DECK --- */
         .arcade-section {
-            background: #0f172a;
-            padding: 85px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding: 70px 0;
         }
 
-        .arcade-tabs {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 30px;
+        .arcade-cabinet {
+            max-width: 560px;
+            margin: 0 auto;
+            padding: 32px;
         }
 
-        .tab-btn {
-            padding: 12px 24px;
-            background: #1e293b;
-            color: #94a3b8;
-            border-radius: 10px;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-
-        .tab-btn.active {
-            background: #3b82f6;
-            color: #ffffff;
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
-        }
-
-        .game-panel {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: #111827;
-            padding: 30px;
-            border-radius: 24px;
-            border: 1px solid rgba(255,255,255,0.06);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-        }
-
-        .game-panel.active {
-            display: flex;
-        }
-
-        /* Responsive Canvas Controls with Strict iPad Multi-Touch Overrides */
-        canvas {
-            border: 4px solid #ffffff;
-            border-radius: 12px;
-            max-width: 100%;
-            height: auto;
-            box-shadow: inset 0 0 40px rgba(0,0,0,0.2);
-            display: block;
-            touch-action: none; /* STOPS IPAD SAFARI GESTURE CONFLICTS COMPLETELY */
-            -webkit-user-select: none;
-            user-select: none;
-        }
-
-        #footballCanvas {
-            background: #15803d;
-        }
-
-        #snakeCanvas {
-            background: #020617;
-        }
-
-        .game-controls-hint {
-            margin-top: 15px;
-            color: #94a3b8;
-            font-size: 14px;
-            text-align: center;
-        }
-
-        .game-controls-hint span {
-            color: #60a5fa;
-            font-weight: bold;
-        }
-
-        .snake-score-board {
-            display: flex;
-            gap: 40px;
-            margin-bottom: 15px;
-            font-size: 20px;
-            font-weight: bold;
-            color: #ffffff;
-        }
-
-        .snake-score-board span {
-            color: #22c55e;
-        }
-
-        /* --- ARCADE TABLET & IPAD PAD STYLES --- */
-        .mobile-controls {
-            display: none; 
-            width: 100%;
-            max-width: 360px;
-            margin-top: 22px;
-            justify-content: center;
-        }
-
-        .d-pad {
+        .game-selector {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
-            width: 200px;
-            height: 200px;
+            margin-bottom: 25px;
+            background: rgba(0,0,0,0.4);
+            padding: 6px;
+            border-radius: 4px;
         }
 
-        .d-btn {
-            background: #1e293b;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            border-radius: 18px;
-            font-size: 26px;
+        .select-btn {
+            background: none;
+            border: none;
+            color: #475569;
+            padding: 12px 5px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .select-btn.active {
+            background: linear-gradient(135deg, #eab308, #ca8a04);
+            color: #03050c;
+            box-shadow: 0 4px 12px rgba(234, 179, 8, 0.3);
+            font-weight: 800;
+        }
+
+        .arcade-scores {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            user-select: none;
-            -webkit-user-select: none;
-            touch-action: none;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            font-size: 17px;
+            font-weight: 700;
         }
 
-        .d-btn:active {
-            background: #3b82f6;
-            color: #ffffff;
+        .arcade-scores span {
+            color: var(--solid-gold);
         }
 
-        .d-up { grid-column: 2; }
-        .d-left { grid-column: 1; grid-row: 2; }
-        .d-right { grid-column: 3; grid-row: 2; }
-        .d-down { grid-column: 2; grid-row: 3; }
-
-        .football-pad {
-            display: flex;
+        .screen-container {
+            position: relative;
             width: 100%;
-            justify-content: space-between;
-            gap: 25px;
+            max-width: 400px;
+            margin: 0 auto;
         }
 
-        .fb-btn {
-            flex: 1;
-            height: 65px;
-            background: #1e293b;
-            border: 2px solid rgba(255, 255, 255, 0.1);
+        canvas {
+            background: #010206;
+            border: 4px solid #1e293b;
+            display: block;
+            width: 100%;
+            height: auto;
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.95);
+        }
+
+        .screen-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(3, 5, 12, 0.94);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .screen-overlay h2 {
+            font-size: 28px;
+            margin-bottom: 6px;
             color: #ffffff;
-            border-radius: 16px;
-            font-weight: bold;
-            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .arcade-controls {
+            display: none;
+            grid-template-areas: 
+                ". up ."
+                "left . right"
+                ". down .";
+            gap: 12px;
+            width: 170px;
+            margin: 25px auto 5px;
+        }
+
+        .pad-btn {
+            background: #0e1726;
+            border: 1px solid rgba(234, 179, 8, 0.2);
+            color: #ffffff;
+            font-size: 22px;
+            padding: 14px;
+            border-radius: 4px;
+            cursor: pointer;
+            user-select: none;
             display: flex;
             align-items: center;
             justify-content: center;
-            user-select: none;
-            -webkit-user-select: none;
-            touch-action: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            transition: all 0.1s;
         }
 
-        .fb-btn:active {
-            background: #3b82f6;
+        .pad-btn:active {
+            background: var(--solid-gold);
+            color: #03050c;
+            transform: scale(0.92);
         }
 
-        /* Active Display Rule on iPad/Mobile screen sizes */
-        @media (max-width: 1024px) {
-            .mobile-controls {
-                display: flex;
-            }
-        }
+        .pad-up { grid-area: up; }
+        .pad-left { grid-area: left; }
+        .pad-right { grid-area: right; }
+        .pad-down { grid-area: down; }
 
+        /* --- GLOBAL PORTFOLIO SECTIONS --- */
         section {
-            padding: 85px 0;
+            padding: 100px 0;
         }
 
         .section-title {
             text-align: center;
-            margin-bottom: 50px;
+            margin-bottom: 65px;
         }
 
         .section-title h2 {
-            font-size: 38px;
+            font-size: 42px;
             color: #ffffff;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+        }
+
+        /* Elaborate Traditional Khmer Signposts (Kbach Phni Tes Leaf Accent) */
+        .section-title h2::before {
+            content: 'ឰ';
+            position: absolute;
+            left: -40px; top: 6px;
+            color: #ca8a04;
+            font-size: 24px;
+            font-weight: normal;
+        }
+        .section-title h2::after {
+            content: 'ឱ';
+            position: absolute;
+            right: -40px; top: 6px;
+            color: #ca8a04;
+            font-size: 24px;
+            font-weight: normal;
+        }
+
+        .section-title .title-kbach-line {
+            width: 160px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--solid-gold), transparent);
+            margin: 15px auto 0;
+            position: relative;
+        }
+        .section-title .title-kbach-line::after {
+            content: '៚';
+            position: absolute;
+            top: -12px; left: 50%;
+            transform: translateX(-50%);
+            color: var(--solid-gold);
+            font-size: 14px;
+            background: #03050c;
+            padding: 0 8px;
         }
 
         .section-title p {
             max-width: 700px;
-            margin: auto;
+            margin: 20px auto 0;
             color: #94a3b8;
+            font-size: 15px;
         }
 
-        .about-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
-        }
-
-        .card {
-            background: #111827;
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 22px;
-            padding: 28px;
-            box-shadow: 0 12px 35px rgba(0,0,0,0.18);
-        }
-
-        .card h3 {
-            color: #ffffff;
-            margin-bottom: 16px;
-            font-size: 24px;
-        }
-
-        .card p {
-            color: #cbd5e1;
-        }
-
-        .info-list li {
-            margin-bottom: 12px;
-            color: #cbd5e1;
-        }
-
-        .info-list strong {
-            color: #60a5fa;
-        }
-
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 22px;
-        }
-
-        .skill-card {
-            background: #111827;
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 20px;
-            padding: 24px;
-            transition: 0.3s;
-            display: block;
-        }
-
-        .skill-card:hover {
-            transform: translateY(-6px);
-            border-color: rgba(96,165,250,0.25);
-        }
-
-        .skill-card h3 {
-            color: #ffffff;
-            margin-bottom: 12px;
-        }
-
-        .skill-card p {
-            color: #cbd5e1;
-            margin-bottom: 14px;
-        }
-
-        .skill-bar {
-            width: 100%;
-            height: 10px;
-            background: #1f2937;
-            border-radius: 20px;
-            overflow: hidden;
-        }
-
-        .skill-fill {
-            height: 100%;
-            border-radius: 20px;
-            background: linear-gradient(90deg, #3b82f6, #06b6d4);
-        }
-
+        /* --- DEEPER KBACH KHMER CARDS GENERATOR --- */
         .projects-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 30px;
         }
 
         .project-card {
-            background: #111827;
-            border-radius: 22px;
-            overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.06);
-            transition: 0.3s;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
 
         .project-card:hover {
-            transform: translateY(-6px);
-            border-color: rgba(96,165,250,0.25);
+            transform: translateY(-8px);
+            border-color: var(--solid-gold);
+            box-shadow: 0 20px 40px rgba(234, 179, 8, 0.15);
         }
 
         .project-content {
-            padding: 22px;
+            padding: 30px 26px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
 
         .project-content h3 {
             color: #ffffff;
-            margin-bottom: 12px;
-            font-size: 22px;
+            font-size: 20px;
+            font-weight: 700;
+            transition: color 0.3s;
+        }
+
+        .project-card:hover .project-content h3 {
+            color: var(--solid-gold);
         }
 
         .project-content p {
-            color: #cbd5e1;
-            margin-bottom: 15px;
+            color: #94a3b8;
+            margin-bottom: 24px;
+            font-size: 14.5px;
+            line-height: 1.6;
+            flex-grow: 1;
+        }
+
+        .project-tags-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: auto;
         }
 
         .project-tag {
             display: inline-block;
-            margin-right: 8px;
-            margin-bottom: 8px;
-            padding: 7px 12px;
-            border-radius: 30px;
-            background: rgba(59,130,246,0.12);
-            color: #93c5fd;
-            font-size: 13px;
+            padding: 4px 12px;
+            border-radius: 2px;
+            background: rgba(234, 179, 8, 0.05);
+            color: var(--solid-gold);
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid rgba(234, 179, 8, 0.2);
+            transition: all 0.3s ease;
         }
 
-        .contact-grid {
+        .project-card:hover .project-tag {
+            background: rgba(234, 179, 8, 0.15);
+            border-color: var(--solid-gold);
+        }
+
+        /* --- ABOUT AREA CONFIGS --- */
+        .about-grid {
             display: grid;
-            grid-template-columns: 0.9fr 1.1fr;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .card {
+            padding: 35px;
+        }
+
+        .card h3 {
+            color: #ffffff;
+            font-size: 23px;
+            font-weight: 700;
+        }
+
+        .card p {
+            color: #94a3b8;
+        }
+
+        .info-list li {
+            margin-bottom: 14px;
+            color: #cbd5e1;
+            font-size: 15px;
+        }
+
+        .info-list strong {
+            color: var(--solid-gold);
+            margin-right: 6px;
+        }
+
+        /* --- SKILLS MATRIX PANELS --- */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 24px;
         }
 
+        .skill-card {
+            padding: 28px;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--solid-gold);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+        }
+
+        .skill-card h3 {
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        .skill-card p {
+            color: #94a3b8;
+            margin-bottom: 16px;
+            font-size: 14px;
+        }
+
+        .skill-bar {
+            width: 100%;
+            height: 7px;
+            background: #060a14;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(234, 179, 8, 0.1);
+        }
+
+        .skill-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ca8a04, var(--solid-gold));
+        }
+
+        /* --- PORTAL HUB INDICES --- */
+        .directory-section {
+            padding: 100px 0;
+            background: #020409;
+        }
+
+        .directory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .dir-card {
+            padding: 28px;
+            transition: 0.3s ease;
+        }
+
+        .dir-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--solid-gold);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+        }
+
+        .dir-card h3 {
+            color: #ffffff;
+            font-size: 19px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+        }
+
+        .link-node-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .link-node-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255,255,255,0.01);
+            padding: 14px 18px;
+            border: 1px solid rgba(255,255,255,0.02);
+            transition: 0.2s;
+        }
+
+        .link-node-item:hover {
+            background: rgba(234, 179, 8, 0.08);
+            border-color: rgba(234, 179, 8, 0.25);
+        }
+
+        .link-node-item a {
+            font-size: 14px;
+            font-weight: 700;
+            color: #cbd5e1;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        .link-node-item a:hover {
+            color: var(--solid-gold);
+        }
+
+        .link-tag {
+            font-size: 11px;
+            background: rgba(234, 179, 8, 0.15);
+            color: var(--solid-gold);
+            padding: 3px 10px;
+            border-radius: 2px;
+            font-weight: 500;
+        }
+
+        /* --- INTERFACES CHANNELS --- */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+            gap: 30px;
+        }
+
         .contact-info p {
-            margin-bottom: 12px;
+            margin-bottom: 14px;
             color: #cbd5e1;
         }
 
         .contact-info strong {
-            color: #60a5fa;
+            color: var(--solid-gold);
         }
 
         .message-box {
             padding: 14px 16px;
-            border-radius: 12px;
+            border-radius: 4px;
             margin-bottom: 18px;
             font-weight: bold;
+            display: none;
         }
 
         .success {
@@ -725,31 +897,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         .form-group {
-            margin-bottom: 18px;
+            margin-bottom: 20px;
         }
 
         .form-group label {
             display: block;
             margin-bottom: 8px;
             color: #ffffff;
-            font-weight: bold;
+            font-weight: 700;
+            font-size: 14px;
         }
 
         .form-group input,
         .form-group textarea {
             width: 100%;
             padding: 14px 16px;
-            border-radius: 14px;
-            border: 1px solid rgba(255,255,255,0.08);
-            background: #0f172a;
+            border-radius: 4px;
+            border: 1px solid rgba(234, 179, 8, 0.2);
+            background: #03050c;
             color: #ffffff;
             outline: none;
             font-size: 15px;
+            transition: 0.3s;
         }
 
         .form-group input:focus,
         .form-group textarea:focus {
-            border-color: rgba(96,165,250,0.45);
+            border-color: var(--solid-gold);
+            box-shadow: 0 0 10px rgba(234, 179, 8, 0.2);
         }
 
         textarea {
@@ -758,43 +933,69 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         footer {
-            padding: 26px 0;
+            padding: 35px 0;
             text-align: center;
-            color: #94a3b8;
-            border-top: 1px solid rgba(255,255,255,0.06);
-            background: #0b1120;
+            color: #475569;
+            border-top: 2px solid #ca8a04;
+            background: #020408;
+            font-size: 14px;
+            position: relative;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--bright-gold), transparent);
         }
 
         @media (max-width: 900px) {
-            .hero-content, .about-grid, .contact-grid, .wc-container {
+            .hero-content,
+            .about-grid,
+            .contact-grid,
+            .wc-container,
+            .projects-grid {
                 grid-template-columns: 1fr;
                 flex-direction: column;
                 text-align: center;
             }
 
-            .wc-text-content { max-width: 100%; margin-bottom: 20px; }
-            nav { flex-direction: column; gap: 14px; }
-            nav ul { flex-wrap: wrap; justify-content: center; }
-            .hero-text h1 { font-size: 40px; }
+            .wc-text-content {
+                max-width: 100%;
+                margin-bottom: 20px;
+            }
+
+            nav {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero-text h1 {
+                font-size: 38px;
+            }
         }
 
         @media (max-width: 600px) {
-            .hero-text h1 { font-size: 32px; }
-            .section-title h2 { font-size: 30px; }
-            .quick-info { grid-template-columns: 1fr; }
+            .hero-text h1 {
+                font-size: 32px;
+            }
+
+            .section-title h2 {
+                font-size: 28px;
+            }
+
+            .quick-info {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-
-<div id="welcomePopUp" class="welcome-overlay">
-    <div class="welcome-card">
-        <span class="welcome-icon">🏆</span>
-        <h2>Welcome to <span>MyPortfolio</span></h2>
-        <p>Explore my IT school work, live coding skills, and custom browser-based arcade engines!</p>
-        <button class="btn btn-primary" onclick="enterWebsite()">Enter & Play Whistle ⚽</button>
-    </div>
-</div>
 
 <header>
     <div class="container">
@@ -804,8 +1005,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <li><a href="#home">Home</a></li>
                 <li><a href="#about">About</a></li>
                 <li><a href="#skills">Skills</a></li>
-                <li><a href="#arcade">Arcade Games</a></li>
                 <li><a href="#projects">Projects</a></li>
+                <li><a href="#links">Research Hub</a></li>
+                <li><a href="#order" style="color: #eab308; font-weight: bold;">Order Website</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
         </nav>
@@ -823,11 +1025,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </p>
             <div class="btn-group">
                 <a href="#projects" class="btn btn-primary">See My Projects</a>
-                <a href="#arcade" class="btn btn-secondary">Play Arcade Games</a>
+                <a href="#order" class="btn btn-secondary">Order Custom Website</a>
             </div>
         </div>
 
-        <div class="hero-card">
+        <!-- High-End Chanthor Kbach Cabinet for Profile Box -->
+        <div class="hero-card kbach-frame">
+            <div class="kbach-corners"></div>
             <div class="profile-image">
                 <img src="https://lh3.googleusercontent.com/a/ACg8ocJxND8bHVbiA28TGb_14l_iDCdp6J17w8Iyp2CMYH-TmvcE_fQ=s400-c" alt="Profile Picture">
             </div>
@@ -856,8 +1060,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 </section>
 
+<div class="kbach-divider"></div>
+
 <div class="worldcup-section">
-    <div class="container wc-container">
+    <div class="container wc-container kbach-frame">
+        <div class="kbach-corners"></div>
         <div class="wc-text-content">
             <span class="wc-badge">Live Hobby Feature</span>
             <h2>Football & <span>World Cup</span> Passion</h2>
@@ -871,43 +1078,107 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 </div>
 
-<section id="arcade" class="arcade-section">
-    <div class="container">
-        <div class="section-title">
-            <h2>Interactive JavaScript Arcade Center</h2>
-            <p>Explore games completely rendered using the HTML5 Canvas API, showing execution loop engines and coordinates calculation.</p>
-        </div>
-        
-        <div class="arcade-tabs">
-            <button class="btn tab-btn active" onclick="switchGame('football')">⚽ Football Game</button>
-            <button class="btn tab-btn" onclick="switchGame('snake')">🐍 Snake Game</button>
-        </div>
+<div class="kbach-divider"></div>
 
-        <div id="footballPanel" class="game-panel active">
-            <canvas id="footballCanvas" width="700" height="400"></canvas>
-            <div class="game-controls-hint">
-                Controls: Use <span>W / S</span> keys, <span>Arrows</span>, or the <span>Buttons Below</span>.
+<!-- --- 3-IN-1 RETRO ARCADE DECK --- -->
+<div class="arcade-section">
+    <div class="container">
+        <div class="arcade-cabinet kbach-frame">
+            <div class="kbach-corners"></div>
+            <div class="game-selector">
+                <button id="btn-snake" class="select-btn active" onclick="switchGame('snake')">🐍 Snake</button>
+                <button id="btn-space" class="select-btn" onclick="switchGame('space')">🚀 Space Dodge</button>
+                <button id="btn-bricks" class="select-btn" onclick="switchGame('bricks')">🧱 Bricks</button>
             </div>
-            <div class="mobile-controls">
-                <div class="football-pad">
-                    <button class="fb-btn" id="touchUp">MOVE UP ▲</button>
-                    <button class="fb-btn" id="touchDown">MOVE DOWN ▼</button>
+            
+            <div class="arcade-scores">
+                <div>Score: <span id="gameScore">0</span></div>
+                <div>High Score: <span id="gameHighScore">0</span></div>
+            </div>
+
+            <div class="screen-container">
+                <canvas id="arcadeCanvas" width="400" height="400"></canvas>
+                <div id="arcadeOverlay" class="screen-overlay">
+                    <h2 id="overlayHeadline">Arcade Deck</h2>
+                    <p style="color: #94a3b8; font-size: 14px; margin-bottom: 10px;" id="gameHelpText">Control using keyboard arrows</p>
+                    <button class="btn btn-primary" onclick="startActiveGame()">Insert Coin & Play</button>
                 </div>
             </div>
+
+            <div id="arcadeControls" class="arcade-controls">
+                <button class="pad-btn pad-up" onclick="sendInput('UP')">▲</button>
+                <button class="pad-btn pad-left" onclick="sendInput('LEFT')">◀</button>
+                <button class="pad-btn pad-right" onclick="sendInput('RIGHT')">▶</button>
+                <button class="pad-btn pad-down" onclick="sendInput('DOWN')">▼</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="kbach-divider"></div>
+
+<!-- --- REFERENCE PORTAL NODE MATRIX --- -->
+<section id="links" class="directory-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>Research & External Links Hub</h2>
+            <div class="title-kbach-line"></div>
+            <p>A structured index of external reference portals, documentation matrix dependencies, and cross-platform profiles.</p>
         </div>
 
-        <div id="snakePanel" class="game-panel">
-            <div class="snake-score-board">
-                <div>Score: <span id="currentSnakeScore">0</span></div>
-                <div>High Score: <span id="highSnakeScore">0</span></div>
-            </div>
-            <canvas id="snakeCanvas" width="400" height="400"></canvas>
-            <div class="game-controls-hint">
-                Controls: Use <span>Arrow Keys</span>, <span>WASD</span>, or the <span>On-screen D-Pad</span>.
-            </div>
-            <div class="mobile-controls">
-                <div class="d-pad">
+        <div class="directory-grid">
+            <div class="dir-card kbach-frame">
+                <div class="kbach-corners"></div>
+                <div class="kbach-card-head">
+                    <h3>📚 Developer Documentation</h3>
+                </div>
+                <div class="link-node-list">
+                    <div class="link-node-item">
+                        <a href="https://developer.mozilla.org/" target="_blank">MDN Web Docs <span class="link-tag">Core Frontend</span></a>
                     </div>
+                    <div class="link-node-item">
+                        <a href="https://www.php.net/docs.php" target="_blank">PHP Reference Manual <span class="link-tag">Backend Logic</span></a>
+                    </div>
+                    <div class="link-node-item">
+                        <a href="https://www.w3schools.com/" target="_blank">W3Schools Tutorial Portal <span class="link-tag">Syntax Guide</span></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dir-card kbach-frame">
+                <div class="kbach-corners"></div>
+                <div class="kbach-card-head">
+                    <h3>🎨 Design & Architecture</h3>
+                </div>
+                <div class="link-node-list">
+                    <div class="link-node-item">
+                        <a href="https://dribbble.com/" target="_blank">Dribbble Showroom <span class="link-tag">UI / UX Layouts</span></a>
+                    </div>
+                    <div class="link-node-item">
+                        <a href="https://tailwindcss.com/" target="_blank">Tailwind Framework docs <span class="link-tag">Modern Style</span></a>
+                    </div>
+                    <div class="link-node-item">
+                        <a href="https://fonts.google.com/" target="_blank">Google Fonts Registry <span class="link-tag">Typography</span></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dir-card kbach-frame">
+                <div class="kbach-corners"></div>
+                <div class="kbach-card-head">
+                    <h3>🔬 Research & Open-Source</h3>
+                </div>
+                <div class="link-node-list">
+                    <div class="link-node-item">
+                        <a href="https://github.com/" target="_blank">GitHub Version Cloud <span class="link-tag">Code Hosting</span></a>
+                    </div>
+                    <div class="link-node-item">
+                        <a href="https://stackoverflow.com/" target="_blank">StackOverflow Matrix <span class="link-tag">Bug Resolution</span></a>
+                    </div>
+                    <div class="link-node-item">
+                        <a href="https://scholar.google.com/" target="_blank">Google Scholar <span class="link-tag">Academic Papers</span></a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -917,425 +1188,498 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="container">
         <div class="section-title">
             <h2>About Me</h2>
-            <p>An introduction to my backgrounds, learning journey, and academic milestones.</p>
+            <div class="title-kbach-line"></div>
+            <p>A short introduction about who I am, my education, and what I want to achieve in the future.</p>
         </div>
+
         <div class="about-grid">
-            <div class="card">
-                <h3>My Journey</h3>
-                <p>I am a passionate student deeply driven by software architecture, system analysis, and frontend interactive styling patterns. I focus heavily on writing optimized, scalable architectures while exploring algorithms, interactive layouts, and modern content ecosystems.</p>
+            <div class="card kbach-frame">
+                <div class="kbach-corners"></div>
+                <div class="kbach-card-head">
+                    <h3>Who I Am</h3>
+                </div>
+                <p>
+                    I am a motivated student who enjoys learning web development and technology. I like creating clean websites,
+                    solving problems, and improving my knowledge day by day.
+                </p>
+                <br>
+                <p>
+                    My goal is to gain experience, build strong projects, and grow into a professional developer in the future.
+                </p>
             </div>
-            <div class="card">
-                <h3>Personal Information</h3>
+
+            <div class="card kbach-frame">
+                <div class="kbach-corners"></div>
+                <div class="kbach-card-head">
+                    <h3>Student Information</h3>
+                </div>
                 <ul class="info-list">
-                    <li><strong>Name:</strong> Bunthoeurn Thearith</li>
-                    <li><strong>Role:</strong> Web Engineering Student</li>
-                    <li><strong>Status:</strong> Actively Learning & Building</li>
-                    <li><strong>Current Year:</strong> 2026</li>
+                    <li><strong>Full Name:</strong> Bunthoeurn Thearith</li>
+                    <li><strong>Major:</strong> Information Technology</li>
+                    <li><strong>Level:</strong> University Student</li>
+                    <li><strong>Email:</strong> Riththeaaa@gmail.com</li>
+                    <li><strong>Phone:</strong> +855 088 751 2032</li>
+                    <li><strong>Address:</strong> Serei Saophoan, Banteay Meanchey, Cambodia</li>
                 </ul>
             </div>
         </div>
     </div>
 </section>
 
-<section id="skills" style="background:#0f172a;">
+<section id="skills">
     <div class="container">
         <div class="section-title">
-            <h2>My Tech Stack</h2>
-            <p>Programming standards, systems tools, and technical architectures I learn and implement daily.</p>
+            <h2>My Skills</h2>
+            <div class="title-kbach-line"></div>
+            <p>These are some skills I am currently learning and practicing.</p>
         </div>
+
         <div class="skills-grid">
-            <div class="skill-card">
-                <h3>HTML5 & CSS3</h3>
-                <p>Responsive interface structures, layout alignments, and smooth CSS keyframe animations.</p>
-                <div class="skill-bar"><div class="skill-fill" style="width: 90%;"></div></div>
+            <a href="Html.html" class="skill-card kbach-frame">
+                <div class="kbach-corners"></div>
+                <h3>HTML</h3>
+                <p>I can build structured and responsive web page layouts.</p>
+                <div class="skill-bar">
+                    <div class="skill-fill" style="width: 90%;"></div>
+                </div>
+            </a>
+
+            <a href="Examit.html" class="skill-card kbach-frame">
+                <div class="kbach-corners"></div>
+                <h3>PHP</h3>
+                <p>PHP can be used to create dynamic web applications and server-side logic.</p>
+                <div class="skill-bar">
+                    <div class="skill-fill" style="width: 75%;"></div>
+                </div>
+            </a>
+
+            <div class="skill-card kbach-frame">
+                <div class="kbach-corners"></div>
+                <h3>UI Design</h3>
+                <p>I enjoy creating clean and modern user interface designs.</p>
+                <div class="skill-bar">
+                    <div class="skill-fill" style="width: 70%;"></div>
+                </div>
             </div>
-            <div class="skill-card">
-                <h3>JavaScript Engine</h3>
-                <p>Execution looping, asynchronous rendering operations, and real-time state arrays tracking.</p>
-                <div class="skill-bar"><div class="skill-fill" style="width: 85%;"></div></div>
-            </div>
-            <div class="skill-card">
-                <h3>PHP Development</h3>
-                <p>Server-side application handling, secure server array validations, and endpoint management.</p>
-                <div class="skill-bar"><div class="skill-fill" style="width: 75%;"></div></div>
-            </div>
-            <div class="skill-card">
-                <h3>React Framework</h3>
-                <p>Component structures, contextual data cycles, and declarative user interface synchronization.</p>
-                <div class="skill-bar"><div class="skill-fill" style="width: 80%;"></div></div>
+
+            <div class="skill-card kbach-frame">
+                <div class="kbach-corners"></div>
+                <h3>Problem Solving</h3>
+                <p>I like analyzing problems and finding practical solutions.</p>
+                <div class="skill-bar">
+                    <div class="skill-fill" style="width: 80%;"></div>
+                </div>
             </div>
         </div>
     </div>
 </section>
 
+<!-- --- PROJECTS GALLERY --- -->
 <section id="projects">
     <div class="container">
         <div class="section-title">
-            <h2>Featured Projects</h2>
-            <p>An overview of software engineering challenges, platform prototypes, and production roadmaps.</p>
+            <h2>My Projects</h2>
+            <div class="title-kbach-line"></div>
+            <p>Some example projects that show my learning and portfolio work.</p>
+        </div>
+
+        <div class="projects-grid">
+            <div class="project-card kbach-frame">
+                <div class="kbach-corners"></div>
+                <a href="DataType&Syntax.html">
+                    <div class="project-content">
+                        <h3>Data type and Syntax (PHP)</h3>
+                        <p>តើ Data type នៅក្នុង PHP មានអ្វីខ្លះ?</p>
+                        <div class="project-tags-wrapper">
+                            <span class="project-tag">Data type</span>
+                            <span class="project-tag">Syntax</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="project-card kbach-frame">
+                <div class="kbach-corners"></div>
+                <a href="Examit.html">
+                    <div class="project-content">
+                        <h3>Electricity (PHP)</h3>
+                        <p>គណនាថ្លៃភ្លើង</p>
+                        <div class="project-tags-wrapper">
+                            <span class="project-tag">Calculation</span>
+                            <span class="project-tag">Logic</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="project-card kbach-frame">
+                <div class="kbach-corners"></div>
+                <a href="ResultCalculator.html">
+                    <div class="project-content">
+                        <h3>Calculate Result Student</h3>
+                        <p>For students who want to calculate the result of their score and grade in a simple way.</p>
+                        <div class="project-tags-wrapper">
+                            <span class="project-tag">Absences</span>
+                            <span class="project-tag">Midterm_Score</span>
+                            <span class="project-tag">Final_Score</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="project-card kbach-frame">
+                <div class="kbach-corners"></div>
+                <a href="PhoneFortune.html">
+                    <div class="project-content">
+                        <h3>PhoneFortune</h3>
+                        <p>កម្មវិធីទស្សន៍ទាយជោគជតារាសីតាមលេខទូរស័ព្ទ (បែបចិន)</p>
+                        <div class="project-tags-wrapper">
+                            <span class="project-tag">PHP</span>
+                            <span class="project-tag">Fun Build</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="order" style="background: #03050c; border-top: 1px solid rgba(234, 179, 8, 0.15); border-bottom: 1px solid rgba(234, 179, 8, 0.15);">
+    <div class="container">
+        <div class="section-title">
+            <h2>Order a Custom Website</h2>
+            <div class="title-kbach-line"></div>
+            <p>Select a blueprint layout tier below. Choosing a configuration auto-populates your service message template context fields instantly.</p>
         </div>
         <div class="projects-grid">
-            <div class="project-card">
-                <div class="project-content">
-                    <h3>Exercise Engine</h3>
-                    <p>An upcoming step-by-step educational product solution platform guiding users through complex problem fields covering Mathematics, Language processing, and scientific proofs.</p>
-                    <span class="project-tag">PHP Architecture</span>
-                    <span class="project-tag">React Engine</span>
-                    <span class="project-tag">Product Build</span>
+            <div class="project-card kbach-frame">
+                <div class="kbach-corners"></div>
+                <div class="project-content" style="text-align: center; padding: 30px 20px;">
+                    <h3 style="color:#eab308; margin-bottom: 10px;">Responsive Landing Page</h3>
+                    <p>Clean semantic structures, optimized grid layouts, embedded CSS keyframes, and intuitive user navigation arrays.</p>
+                    <div class="project-tags-wrapper" style="justify-content: center; margin-bottom: 15px;">
+                        <span class="project-tag">HTML5 / CSS Grid</span>
+                        <span class="project-tag">Interactive Frontend</span>
+                    </div>
+                    <a href="#contact" class="btn btn-primary" style="display:block; margin-top:20px; width:100%;" onclick="setOrderSubject('Responsive Landing Page Package')">Order Project Tier</a>
                 </div>
             </div>
-            <div class="project-card">
-                <div class="project-content">
-                    <h3>Student Portfolio Core</h3>
-                    <p>A modern, modular template framework built to deploy clean, high-performance professional portfolio layouts with complete fluid responsive compatibility matrices.</p>
-                    <span class="project-tag">HTML5 UI</span>
-                    <span class="project-tag">CSS Grid Styling</span>
-                    <span class="project-tag">Full Responsive</span>
-                </div>
-            </div>
-            <div class="project-card">
-                <div class="project-content">
-                    <h3>Canvas Gaming Engine</h3>
-                    <p>A high-performance lightweight script library delivering logic ticks, coordinate calculations, state trackers, and smooth custom canvas refresh loops.</p>
-                    <span class="project-tag">Vanilla JS</span>
-                    <span class="project-tag">Canvas API</span>
-                    <span class="project-tag">Arcade Physics</span>
+            <div class="project-card kbach-frame">
+                <div class="kbach-corners"></div>
+                <div class="project-content" style="text-align: center; padding: 30px 20px;">
+                    <h3 style="color:#eab308; margin-bottom: 10px;">Full-Stack Web App</h3>
+                    <p>Dynamic engine handling logic loops, client data validation interfaces, backend script architectures, and system analysis setups.</p>
+                    <div class="project-tags-wrapper" style="justify-content: center; margin-bottom: 15px;">
+                        <span class="project-tag">Dynamic Web App</span>
+                        <span class="project-tag">System Logic Processing</span>
+                    </div>
+                    <a href="#contact" class="btn btn-primary" style="display:block; margin-top:20px; width:100%;" onclick="setOrderSubject('Full-Stack Architecture Package')">Order Architecture Tier</a>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<section id="contact" style="background:#0f172a;">
+<section id="contact" style="background:#020409;">
     <div class="container">
         <div class="section-title">
-            <h2>Get In Touch</h2>
-            <p>Have an interesting project suggestion or looking to collaborate? Drop a message down below!</p>
+            <h2>Contact Me</h2>
+            <div class="title-kbach-line"></div>
+            <p>Send me a message through the form below.</p>
         </div>
+
         <div class="contact-grid">
-            <div class="contact-info">
-                <div class="card" style="height: 100%;">
-                    <h3>Contact Channels</h3>
-                    <p style="margin-bottom:20px;">Feel free to drop a message through this form. All inputs are evaluated instantly via backend data validation arrays securely.</p>
-                    <p><strong>Email:</strong> communication@yourdomain.com</p>
-                    <p><strong>Location:</strong> Cambodia University Campus</p>
-                    <p style="margin-top:20px;"><strong>Operational Engine:</strong> PHP Form Validation</p>
+            <div class="card contact-info kbach-frame">
+                <div class="kbach-corners"></div>
+                <div class="kbach-card-head">
+                    <h3>Let's Connect</h3>
+                </div>
+                <p><strong>Email:</strong> Riththeaaa@gmail.com</p>
+                <p><strong>Phone:</strong> +855 088 751 2032</p>
+                <p><strong>Location:</strong> Serei Saophoan, Cambodia</p>
+                <p><strong>Status:</strong> Available for student projects and collaboration</p>
+                
+                <div style="margin-top: 25px; display: flex; flex-direction: column; gap: 12px;">
+                    <a href="https://www.fiverr.com/" target="_blank" class="btn btn-secondary" style="text-align: center;">
+                        💚 Order via Fiverr Marketplace
+                    </a>
+                    <a href="https://t.me/" target="_blank" class="btn btn-secondary" style="text-align: center; border-color: #3b82f6; color: #93c5fd;">
+                        ✈️ Direct Request via Telegram
+                    </a>
                 </div>
             </div>
-            <div class="contact-form">
-                <div class="card">
-                    <?php if (!empty($error)): ?>
-                        <div class="message-box error"><?php echo $error; ?></div>
-                    <?php endif; ?>
-                    <?php if (!empty($success)): ?>
-                        <div class="message-box success"><?php echo $success; ?></div>
-                    <?php endif; ?>
 
-                    <form action="index.php#contact" method="POST">
-                        <div class="form-group">
-                            <label for="name">Your Name</label>
-                            <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($name); ?>" placeholder="Enter your full name">
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Your Email</label>
-                            <input type="text" id="email" name="email" value="<?php echo htmlspecialchars($email); ?>" placeholder="name@example.com">
-                        </div>
-                        <div class="form-group">
-                            <label for="subject">Subject</label>
-                            <input type="text" id="subject" name="subject" value="<?php echo htmlspecialchars($subject); ?>" placeholder="What are you getting in touch about?">
-                        </div>
-                        <div class="form-group">
-                            <label for="message">Message</label>
-                            <textarea id="message" name="message" placeholder="Type your message out here..."><?php echo htmlspecialchars($message); ?></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary" style="width: 100%;">Send Security Checked Message</button>
-                    </form>
+            <div class="card kbach-frame">
+                <div class="kbach-corners"></div>
+                <div class="kbach-card-head">
+                    <h3>Send Message</h3>
                 </div>
+
+                <div id="statusAlert" class="message-box"></div>
+
+                <form id="portfolioForm" onsubmit="handleFormSubmit(event)">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="text" id="email" name="email">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <input type="text" id="subject" name="subject">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
+                </form>
             </div>
         </div>
     </div>
 </section>
 
 <footer>
-    <p>&copy; 2026 Bunthoeurn Thearith. Built from idea to code production architecture smoothly.</p>
+    <div class="container">
+        <p>© 2026 Student Portfolio. All rights reserved.</p>
+    </div>
 </footer>
 
 <script>
-    // --- 1. POPUP & GLOBAL SITE NAVIGATION LAYERS ---
-    function enterWebsite() {
-        const overlay = document.getElementById('welcomePopUp');
-        overlay.style.opacity = '0';
-        setTimeout(() => {
-            overlay.style.display = 'none';
-        }, 500);
-    }
-
-    function switchGame(gameType) {
-        // Manage Tabs
-        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-        // Manage Panels
-        document.getElementById('footballPanel').classList.remove('active');
-        document.getElementById('snakePanel').classList.remove('active');
-
-        if (gameType === 'football') {
-            document.querySelector('.tab-btn[onclick*="football"]').classList.add('active');
-            document.getElementById('footballPanel').classList.add('active');
-            initFootballGame();
-        } else if (gameType === 'snake') {
-            document.querySelector('.tab-btn[onclick*="snake"]').classList.add('active');
-            document.getElementById('snakePanel').classList.add('active');
-            initSnakeGame();
+    function setOrderSubject(packageName) {
+        const subjectField = document.getElementById('subject');
+        if (subjectField) {
+            subjectField.value = "Order Request: " + packageName;
         }
     }
 
-    // --- 2. FOOTBALL (PONG STYLE) ARCADE ENGINE ---
-    const fbCanvas = document.getElementById('footballCanvas');
-    const fbCtx = fbCanvas.getContext('2d');
-    let fbAnimationId;
+    function handleFormSubmit(event) {
+        event.preventDefault();
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const subject = document.getElementById('subject').value.trim();
+        const message = document.getElementById('message').value.trim();
+        const alertBox = document.getElementById('statusAlert');
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    let playerY = 160, aiY = 160;
-    const paddleWidth = 12, paddleHeight = 80;
-    let ballX = 350, ballY = 200;
-    let ballSpeedX = 4, ballSpeedY = 4;
-    let playerScore = 0, aiScore = 0;
-    let keysPressed = {};
-
-    function initFootballGame() {
-        if (fbAnimationId) cancelAnimationFrame(fbAnimationId);
-        ballX = fbCanvas.width / 2;
-        ballY = fbCanvas.height / 2;
-        ballSpeedX = 4 * (Math.random() > 0.5 ? 1 : -1);
-        ballSpeedY = 3 * (Math.random() > 0.5 ? 1 : -1);
-        fbUpdate();
-    }
-
-    function fbUpdate() {
-        // Player Movement Controls
-        if (keysPressed['w'] || keysPressed['ArrowUp'] || keysPressed['touchUp']) {
-            playerY = Math.max(10, playerY - 6);
-        }
-        if (keysPressed['s'] || keysPressed['ArrowDown'] || keysPressed['touchDown']) {
-            playerY = Math.min(fbCanvas.height - paddleHeight - 10, playerY + 6);
-        }
-
-        // Simple AI Tracking Core
-        let aiCenter = aiY + paddleHeight / 2;
-        if (aiCenter < ballY - 15) aiY = Math.min(fbCanvas.height - paddleHeight - 10, aiY + 4.5);
-        else if (aiCenter > ballY + 15) aiY = Math.max(10, aiY - 4.5);
-
-        // Physics Boundary Calculations
-        ballX += ballSpeedX;
-        ballY += ballSpeedY;
-
-        if (ballY <= 10 || ballY >= fbCanvas.height - 10) ballSpeedY = -ballSpeedY;
-
-        // Player Collision Field
-        if (ballX <= 30 && ballX >= 15 && ballY >= playerY && ballY <= playerY + paddleHeight) {
-            ballSpeedX = Math.abs(ballSpeedX) + 0.3; // Incremental acceleration
-            ballSpeedY += (ballY - (playerY + paddleHeight / 2)) * 0.1;
-        }
-        // AI Collision Field
-        if (ballX >= fbCanvas.width - 30 && ballX <= fbCanvas.width - 15 && ballY >= aiY && ballY <= aiY + paddleHeight) {
-            ballSpeedX = -Math.abs(ballSpeedX) - 0.3;
-            ballSpeedY += (ballY - (aiY + paddleHeight / 2)) * 0.1;
-        }
-
-        // Goal Check Analysis
-        if (ballX < 0) { aiScore++; initFootballGame(); return; }
-        if (ballX > fbCanvas.width) { playerScore++; initFootballGame(); return; }
-
-        // Render Field Configurations
-        fbCtx.fillStyle = '#15803d';
-        fbCtx.fillRect(0, 0, fbCanvas.width, fbCanvas.height);
-
-        // Render Pitch Markings
-        fbCtx.strokeStyle = 'rgba(255,255,255,0.4)';
-        fbCtx.lineWidth = 4;
-        fbCtx.strokeRect(10, 10, fbCanvas.width - 20, fbCanvas.height - 20);
-        fbCtx.beginPath();
-        fbCtx.moveTo(fbCanvas.width / 2, 10);
-        fbCtx.lineTo(fbCanvas.width / 2, fbCanvas.height - 10);
-        fbCtx.stroke();
-
-        // Render Center Circle
-        fbCtx.beginPath();
-        fbCtx.arc(fbCanvas.width / 2, fbCanvas.height / 2, 50, 0, Math.PI * 2);
-        fbCtx.stroke();
-
-        // Render Striker Paddles
-        fbCtx.fillStyle = '#60a5fa'; // Player Blue
-        fbCtx.fillRect(18, playerY, paddleWidth, paddleHeight);
-        fbCtx.fillStyle = '#ef4444'; // Enemy Red
-        fbCtx.fillRect(fbCanvas.width - 30, aiY, paddleWidth, paddleHeight);
-
-        // Render Ball Graphic
-        fbCtx.fillStyle = '#ffffff';
-        fbCtx.beginPath();
-        fbCtx.arc(ballX, ballY, 8, 0, Math.PI * 2);
-        fbCtx.fill();
-
-        // Render Real-time Arcade Scoring Layouts
-        fbCtx.font = 'bold 32px sans-serif';
-        fbCtx.fillStyle = 'rgba(255,255,255,0.7)';
-        fbCtx.fillText(playerScore, fbCanvas.width / 2 - 60, 50);
-        fbCtx.fillText(aiScore, fbCanvas.width / 2 + 40, 50);
-
-        fbAnimationId = requestAnimationFrame(fbUpdate);
-    }
-
-    // --- 3. RETRO SNAKE ARCADE ENGINE ---
-    const snakeCanvas = document.getElementById('snakeCanvas');
-    const snakeCtx = snakeCanvas.getContext('2d');
-    let snakeTimerId;
-
-    let snake = [{x: 200, y: 200}];
-    let dx = 20, dy = 0;
-    let foodX, foodY;
-    let snakeScore = 0, snakeHighScore = 0;
-    const gridCellSize = 20;
-
-    function initSnakeGame() {
-        if (snakeTimerId) clearInterval(snakeTimerId);
-        snake = [{x: 200, y: 200}, {x: 180, y: 200}, {x: 160, y: 200}];
-        dx = 20; dy = 0;
-        snakeScore = 0;
-        document.getElementById('currentSnakeScore').innerText = snakeScore;
-        generateFood();
-        snakeTimerId = setInterval(snakeUpdate, 100);
-    }
-
-    function snakeUpdate() {
-        if (checkSnakeCollision()) {
-            clearInterval(snakeTimerId);
-            alert("Game Over! Score: " + snakeScore);
-            initSnakeGame();
+        if (!name || !email || !subject || !message) {
+            alertBox.innerText = "Please fill in all fields.";
+            alertBox.className = "message-box error";
+            alertBox.style.display = "block";
             return;
         }
-
-        // Advance Snake Position Matrix
-        const head = {x: snake[0].x + dx, y: snake[0].y + dy};
-        snake.unshift(head);
-
-        // Check Food Intersection
-        if (head.x === foodX && head.y === foodY) {
-            snakeScore += 10;
-            document.getElementById('currentSnakeScore').innerText = snakeScore;
-            if (snakeScore > snakeHighScore) {
-                snakeHighScore = snakeScore;
-                document.getElementById('highSnakeScore').innerText = snakeHighScore;
-            }
-            generateFood();
-        } else {
-            snake.pop();
+        if (!emailPattern.test(email)) {
+            alertBox.innerText = "Please enter a valid email address.";
+            alertBox.className = "message-box error";
+            alertBox.style.display = "block";
+            return;
         }
-
-        // Render Grid Sandbox
-        snakeCtx.fillStyle = '#020617';
-        snakeCtx.fillRect(0, 0, snakeCanvas.width, snakeCanvas.height);
-
-        // Render Target Object (Food Apple)
-        snakeCtx.fillStyle = '#ef4444';
-        snakeCtx.fillRect(foodX + 2, foodY + 2, gridCellSize - 4, gridCellSize - 4);
-
-        // Render Snake Array Elements
-        snake.forEach((part, index) => {
-            snakeCtx.fillStyle = index === 0 ? '#22c55e' : '#16a34a';
-            snakeCtx.fillRect(part.x + 1, part.y + 1, gridCellSize - 2, gridCellSize - 2);
-        });
+        alertBox.innerText = `Thank you, ${name}! Your request has been compiled loop architecture smoothly.`;
+        alertBox.className = "message-box success";
+        alertBox.style.display = "block";
+        window.location.href = `mailto:Riththeaaa@gmail.com?subject=${encodeURIComponent(subject)}&body=Name: ${encodeURIComponent(name)}%0AEmail: ${encodeURIComponent(email)}%0AMessage: ${encodeURIComponent(message)}`;
+        document.getElementById('portfolioForm').reset();
     }
 
-    function generateFood() {
-        foodX = Math.floor(Math.random() * (snakeCanvas.width / gridCellSize)) * gridCellSize;
-        foodY = Math.floor(Math.random() * (snakeCanvas.height / gridCellSize)) * gridCellSize;
-        // Verify food doesn't overlay snake array positions
-        snake.forEach(part => {
-            if (part.x === foodX && part.y === foodY) generateFood();
-        });
+    /* --- RETRO ARCADE RUNTIME ENGINE --- */
+    const canvas = document.getElementById("arcadeCanvas");
+    const ctx = canvas.getContext("2d");
+    const overlay = document.getElementById("arcadeOverlay");
+    const headline = document.getElementById("overlayHeadline");
+    const helpText = document.getElementById("gameHelpText");
+    const scoreText = document.getElementById("gameScore");
+    const highscoreText = document.getElementById("gameHighScore");
+    const dpad = document.getElementById("arcadeControls");
+
+    let currentGame = 'snake';
+    let running = false;
+    let engineInterval = null;
+    let score = 0;
+    let highScores = { snake: 0, space: 0, bricks: 0 };
+
+    let snake, snakeDir, food;
+    let playerX, obstacles, frameCount;
+    let paddleX, ballX, ballY, ballDX, ballDY, bricksArray;
+
+    if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+        dpad.style.display = "grid";
+        helpText.innerText = "Use the gamepad buttons below";
     }
 
-    function checkSnakeCollision() {
-        const head = snake[0];
-        // Wall boundaries collisions
-        if (head.x < 0 || head.x >= snakeCanvas.width || head.y < 0 || head.y >= snakeCanvas.height) return true;
-        // Tail collision loops
-        for (let i = 1; i < snake.length; i++) {
-            if (snake[i].x === head.x && snake[i].y === head.y) return true;
-        }
-        return false;
-    }
+    window.addEventListener("keydown", (e) => {
+        if(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"," "].indexOf(e.key) > -1) e.preventDefault();
+    }, {passive: false});
 
-    // --- 4. HARDWARE INPUT LISTENER ARRAYS (DESKTOP KEYBOARD) ---
-    window.addEventListener('keydown', e => {
-        keysPressed[e.key] = true;
-        
-        // Prevent window viewport scrolling configurations while interacting with games
-        if (["Space", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.code)) {
-            e.preventDefault();
-        }
-
-        // Snake Steering Axis Matrix Mapping
-        if (document.getElementById('snakePanel').classList.contains('active')) {
-            if ((e.key === 'ArrowUp' || e.key === 'w') && dy === 0) { dx = 0; dy = -gridCellSize; }
-            if ((e.key === 'ArrowDown' || e.key === 's') && dy === 0) { dx = 0; dy = gridCellSize; }
-            if ((e.key === 'ArrowLeft' || e.key === 'a') && dx === 0) { dx = -gridCellSize; dy = 0; }
-            if ((e.key === 'ArrowRight' || e.key === 'd') && dx === 0) { dx = gridCellSize; dy = 0; }
+    document.addEventListener("keydown", (e) => {
+        if (!running) return;
+        if(currentGame === 'snake') {
+            if(e.key === "ArrowLeft" && snakeDir !== "RIGHT") snakeDir = "LEFT";
+            if(e.key === "ArrowUp" && snakeDir !== "DOWN") snakeDir = "UP";
+            if(e.key === "ArrowRight" && snakeDir !== "LEFT") snakeDir = "RIGHT";
+            if(e.key === "ArrowDown" && snakeDir !== "UP") snakeDir = "DOWN";
+        } else if(currentGame === 'space' || currentGame === 'bricks') {
+            if(e.key === "ArrowLeft") sendInput("LEFT");
+            if(e.key === "ArrowRight") sendInput("RIGHT");
         }
     });
 
-    window.addEventListener('keyup', e => { keysPressed[e.key] = false; });
+    function switchGame(target) {
+        if(running) stopGameEngine();
+        currentGame = target;
+        
+        document.querySelectorAll('.select-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(`btn-${target}`).classList.add('active');
 
-    // --- 5. TOUCHSCREEN D-PAD RUNTIMES (TABLET/IPAD COMPATIBILITY) ---
-    function configureTouchControls(btnId, targetKey) {
-        const el = document.getElementById(btnId);
-        if (!el) return;
+        highscoreText.innerText = highScores[currentGame];
+        scoreText.innerText = 0;
 
-        const startAction = (e) => {
-            e.preventDefault();
-            keysPressed[targetKey] = true;
-            
-            // Handle Snake Discrete direction updates instantly on interface tap
-            if (document.getElementById('snakePanel').classList.contains('active')) {
-                if (targetKey === 'sUp' && dy === 0) { dx = 0; dy = -gridCellSize; }
-                if (targetKey === 'sDown' && dy === 0) { dx = 0; dy = gridCellSize; }
-                if (targetKey === 'sLeft' && dx === 0) { dx = -gridCellSize; dy = 0; }
-                if (targetKey === 'sRight' && dx === 0) { dx = gridCellSize; dy = 0; }
+        if(target === 'snake') { headline.innerText = "🐍 Neon Snake"; }
+        else if(target === 'space') { headline.innerText = "🚀 Space Dodge"; }
+        else if(target === 'bricks') { headline.innerText = "🧱 Brick Breaker"; }
+        overlay.style.display = "flex";
+    }
+
+    function startActiveGame() {
+        overlay.style.display = "none";
+        score = 0;
+        scoreText.innerText = score;
+        running = true;
+
+        if(currentGame === 'snake') {
+            snake = [{x: 200, y: 200}, {x: 180, y: 200}, {x: 160, y: 200}];
+            snakeDir = "RIGHT";
+            spawnFood();
+            engineInterval = setInterval(runSnake, 100);
+        } else if(currentGame === 'space') {
+            playerX = 180;
+            obstacles = [];
+            frameCount = 0;
+            engineInterval = setInterval(runSpaceDodge, 1000/60);
+        } else if(currentGame === 'bricks') {
+            paddleX = 160;
+            ballX = 200; ballY = 350;
+            ballDX = 3; ballDY = -3;
+            bricksArray = [];
+            for(let r=0; r<4; r++) {
+                for(let c=0; c<6; c++) {
+                    bricksArray.push({x: c*60 + 20, y: r*20 + 40, active: true});
+                }
             }
-        };
-
-        const stopAction = (e) => {
-            e.preventDefault();
-            keysPressed[targetKey] = false;
-        };
-
-        el.addEventListener('touchstart', startAction, { passive: false });
-        el.addEventListener('touchend', stopAction, { passive: false });
-        el.addEventListener('mousedown', startAction);
-        el.addEventListener('mouseup', stopAction);
+            engineInterval = setInterval(runBrickBreaker, 1000/60);
+        }
     }
 
-    // Initialize D-Pad inside the DOM dynamically
-    const dPadElement = document.querySelector('.d-pad');
-    if (dPadElement) {
-        dPadElement.innerHTML = `
-            <button class="d-btn d-up" id="sUp">▲</button>
-            <button class="d-btn d-left" id="sLeft">◀</button>
-            <button class="d-btn d-right" id="sRight">▶</button>
-            <button class="d-btn d-down" id="sDown">▼</button>
-        `;
+    function stopGameEngine() {
+        running = false;
+        clearInterval(engineInterval);
+        if(score > highScores[currentGame]) {
+            highScores[currentGame] = score;
+            highscoreText.innerText = score;
+        }
     }
 
-    // Bind Touch Controllers to Loop Frameworks
-    configureTouchControls('touchUp', 'touchUp');
-    configureTouchControls('touchDown', 'touchDown');
-    configureTouchControls('sUp', 'sUp');
-    configureTouchControls('sLeft', 'sLeft');
-    configureTouchControls('sRight', 'sRight');
-    configureTouchControls('sDown', 'sDown');
+    function gameOver(msg) {
+        stopGameEngine();
+        headline.innerText = msg;
+        overlay.style.display = "flex";
+    }
 
-    // Auto-Run Default Selection Loop on Execution Init
-    window.onload = () => {
-        initFootballGame();
-    };
+    function sendInput(dir) {
+        if(!running) return;
+        if(currentGame === 'snake') {
+            if(dir === "LEFT" && snakeDir !== "RIGHT") snakeDir = "LEFT";
+            if(dir === "UP" && snakeDir !== "DOWN") snakeDir = "UP";
+            if(dir === "RIGHT" && snakeDir !== "LEFT") snakeDir = "RIGHT";
+            if(dir === "DOWN" && snakeDir !== "UP") snakeDir = "DOWN";
+        } else if(currentGame === 'space') {
+            if(dir === 'LEFT' && playerX > 10) playerX -= 25;
+            if(dir === 'RIGHT' && playerX < 350) playerX += 25;
+        } else if(currentGame === 'bricks') {
+            if(dir === 'LEFT' && paddleX > 0) paddleX -= 30;
+            if(dir === 'RIGHT' && paddleX < 320) paddleX += 30;
+        }
+    }
+
+    /* --- SNAKE --- */
+    function spawnFood() {
+        food = { x: Math.floor(Math.random()*19)*20 + 10, y: Math.floor(Math.random()*19)*20 + 10 };
+    }
+    function runSnake() {
+        let head = Object.assign({}, snake[0]);
+        if(snakeDir === "LEFT") head.x -= 20;
+        if(snakeDir === "UP") head.y -= 20;
+        if(snakeDir === "RIGHT") head.x += 20;
+        if(snakeDir === "DOWN") head.y += 20;
+
+        if(head.x < 0 || head.x >= 400 || head.y < 0 || head.y >= 400 || snake.some(s => s.x === head.x && s.y === head.y)) {
+            gameOver(`💥 Crash! Score: ${score}`); return;
+        }
+        snake.unshift(head);
+        if(Math.abs(head.x + 10 - food.x) < 15 && Math.abs(head.y + 10 - food.y) < 15) {
+            score += 10; scoreText.innerText = score; spawnFood();
+        } else { snake.pop(); }
+
+        ctx.fillStyle = "#010206"; ctx.fillRect(0,0,400,400);
+        ctx.fillStyle = "#f43f5e"; ctx.beginPath(); ctx.arc(food.x, food.y, 7, 0, Math.PI*2); ctx.fill();
+        snake.forEach((part, i) => {
+            ctx.fillStyle = i === 0 ? "#ffd700" : "#ca8a04"; ctx.fillRect(part.x+1, part.y+1, 18, 18);
+        });
+    }
+
+    /* --- SPACE DODGE --- */
+    function runSpaceDodge() {
+        frameCount++;
+        if(frameCount % 25 === 0) {
+            obstacles.push({x: Math.random()*360, y: -20, size: Math.random()*20+15, speed: Math.random()*3+2});
+        }
+        ctx.fillStyle = "#010206"; ctx.fillRect(0,0,400,400);
+        ctx.fillStyle = "#ffd700";
+        ctx.beginPath(); ctx.moveTo(playerX+20, 350); ctx.lineTo(playerX, 380); ctx.lineTo(playerX+40, 380); ctx.fill();
+
+        for(let i=obstacles.length-1; i>=0; i--) {
+            let o = obstacles[i]; o.y += o.speed;
+            ctx.fillStyle = "#475569"; ctx.fillRect(o.x, o.y, o.size, o.size);
+            if(o.y > 400) { obstacles.splice(i, 1); score++; scoreText.innerText = score; }
+            if(o.y+o.size > 350 && o.y < 380 && o.x+o.size > playerX && o.x < playerX+40) {
+                gameOver(`🚀 Defeated! Score: ${score}`); return;
+            }
+        }
+    }
+
+    /* --- BRICK BREAKER --- */
+    function runBrickBreaker() {
+        ballX += ballDX; ballY += ballDY;
+        if(ballX < 8 || ballX > 392) ballDX = -ballDX;
+        if(ballY < 8) ballDY = -ballDY;
+        if(ballY > 370 && ballY < 380 && ballX > paddleX && ballX < paddleX+80) {
+            ballDY = -ballDY; ballY = 368;
+        }
+        if(ballY > 400) { gameOver(`💀 Out! Score: ${score}`); return; }
+
+        ctx.fillStyle = "#010206"; ctx.fillRect(0,0,400,400);
+        ctx.fillStyle = "#ffd700"; ctx.fillRect(paddleX, 375, 80, 12);
+        ctx.fillStyle = "#ffffff"; ctx.beginPath(); ctx.arc(ballX, ballY, 7, 0, Math.PI*2); ctx.fill();
+
+        let activeBricks = 0;
+        bricksArray.forEach(b => {
+            if(!b.active) return;
+            activeBricks++;
+            ctx.fillStyle = "#ca8a04"; ctx.fillRect(b.x, b.y, 50, 14);
+            if(ballX > b.x && ballX < b.x+50 && ballY > b.y && ballY < b.y+14) {
+                b.active = false; ballDY = -ballDY; score += 20; scoreText.innerText = score;
+            }
+        });
+        if(activeBricks === 0) gameOver("🏆 Board Cleared!");
+    }
+
+    switchGame('snake');
 </script>
+
 </body>
 </html>

@@ -1,464 +1,578 @@
 <!DOCTYPE html>
 <html lang="km">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>គណនាតម្លៃអគ្គិសនីតាមកម្រិត</title>
-<link href="https://fonts.googleapis.com/css2?family=Hanuman:wght@400;700&display=swap" rel="stylesheet">
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>គណនាតម្លៃអគ្គិសនីតាមកម្រិត</title>
+    <!-- Importing modern clean Khmer & English fonts matching the master style -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:ital,wght@0,100..700;1,100..700&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+    
+    <style>
+        *, *::before, *::after { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+        }
 
-  :root {
-    --bg: #0b1120;
-    --surface: #0b1120;
-    --card: #21242f;
-    --border: rgba(255,255,255,0.08);
-    --border-hover: rgba(255,255,255,0.18);
-    --text: #f0f0f4;
-    --muted: #8b8fa8;
-    --hint: #555870;
-    --accent: #3a0fd8;
-    --accent-dim: rgba(245,197,24,0.12);
-    --danger: #ff6b6b;
-    --danger-bg: rgba(255,107,107,0.1);
-    --success: #4ade80;
-  }
+        :root {
+            --khmer-gold: linear-gradient(135deg, #ffd700 0%, #b45309 50%, #ffd700 100%);
+            --solid-gold: #eab308;
+            --bright-gold: #fde047;
+            --khmer-gold-glow: rgba(234, 179, 8, 0.3);
+            --dark-surface: #03050c;
+            --dark-card: linear-gradient(180deg, rgba(19, 28, 46, 0.9), rgba(10, 15, 29, 0.98));
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --danger: #ff6b6b;
+            --danger-bg: rgba(255, 107, 107, 0.08);
+            --success: #4ade80;
+        }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Hanuman', serif;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem 1rem;
-  }
+        body {
+            font-family: "Kantumruy Pro", "Plus Jakarta Sans", Arial, sans-serif;
+            background: var(--dark-surface);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+            position: relative;
+        }
 
-  .page-wrap {
-    width: 100%;
-    max-width: 520px;
-  }
+        /* Ambient Traditional Khmer Angkorean Grid Background Matrix */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: 
+                radial-gradient(rgba(234, 179, 8, 0.02) 2px, transparent 2px),
+                linear-gradient(45deg, rgba(234, 179, 8, 0.01) 25%, transparent 25%, transparent 75%, rgba(234, 179, 8, 0.01) 75%, rgba(234, 179, 8, 0.01)),
+                linear-gradient(45deg, rgba(234, 179, 8, 0.01) 25%, #03050c 25%, #03050c 75%, rgba(234, 179, 8, 0.01) 75%, rgba(234, 179, 8, 0.01));
+            background-size: 30px 30px, 60px 60px, 60px 60px;
+            background-position: 0 0, 0 0, 30px 30px;
+            z-index: -1;
+            pointer-events: none;
+        }
 
-  .header {
-    margin-bottom: 2rem;
-    text-align: center;
-  }
+        .page-wrap {
+            width: 100%;
+            max-width: 540px;
+            animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
 
-  .header-icon {
-    width: 52px;
-    height: 52px;
-    background: var(--accent-dim);
-    border-radius: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 1rem;
-    font-size: 24px;
-  }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-  .header h1 {
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 4px;
-  }
+        .header {
+            margin-bottom: 2.5rem;
+            text-align: center;
+        }
 
-  .header p {
-    font-size: 13px;
-    color: var(--muted);
-  }
+        .header-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(234, 179, 8, 0.1);
+            border: 1px solid rgba(234, 179, 8, 0.25);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.25rem;
+            font-size: 24px;
+            color: var(--solid-gold);
+            box-shadow: 0 0 20px var(--khmer-gold-glow);
+        }
 
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 1.75rem;
-    margin-bottom: 1rem;
-  }
+        .header h1 {
+            font-size: 26px;
+            font-weight: 800;
+            background: var(--khmer-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 6px;
+            text-shadow: 0 0 15px rgba(234, 179, 8, 0.1);
+        }
 
-  .section-label {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    color: var(--hint);
-    text-transform: uppercase;
-    margin-bottom: 1rem;
-  }
+        .header p {
+            font-size: 14px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
 
-  .field-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 16px;
-  }
+        /* --- HIGH-END KBACH KHMER ARCHITECTURAL FRAME --- */
+        .card {
+            background: var(--dark-card);
+            border: 2px solid #a16207;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), inset 0 0 25px rgba(234, 179, 8, 0.05);
+            border-radius: 4px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+        }
 
-  .field {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
+        /* Sharp Roof Peak Points (Chfa Accents) at top left/right corners */
+        .card::before {
+            content: 'ឝ';
+            position: absolute;
+            top: -24px; left: -8px;
+            color: var(--solid-gold);
+            font-size: 28px;
+            font-weight: normal;
+            text-shadow: 0 -2px 10px var(--khmer-gold-glow);
+            z-index: 5;
+        }
 
-  .field label {
-    font-size: 13px;
-    color: var(--muted);
-  }
+        .card::after {
+            content: 'ឞ';
+            position: absolute;
+            top: -24px; right: -8px;
+            color: var(--solid-gold);
+            font-size: 28px;
+            font-weight: normal;
+            text-shadow: 0 -2px 10px var(--khmer-gold-glow);
+            z-index: 5;
+        }
 
-  .input-wrap {
-    position: relative;
-  }
+        /* Traditional Angkorean Corner Pediment Decorative Fills */
+        .kbach-corners {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            border-radius: inherit;
+        }
+        .kbach-corners::before {
+            content: '៚';
+            position: absolute;
+            bottom: -2px; left: 4px;
+            color: #78350f;
+            font-size: 14px;
+            opacity: 0.6;
+        }
+        .kbach-corners::after {
+            content: '៚';
+            position: absolute;
+            bottom: -2px; right: 4px;
+            color: #78350f;
+            font-size: 14px;
+            opacity: 0.6;
+            transform: scaleX(-1);
+        }
 
-  .input-wrap input {
-    width: 100%;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 12px 52px 12px 14px;
-    font-size: 18px;
-    font-weight: 700;
-    font-family: 'Hanuman', serif;
-    color: var(--text);
-    transition: border-color 0.2s, box-shadow 0.2s;
-    -moz-appearance: textfield;
-  }
+        .section-label {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            color: var(--solid-gold);
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-  .input-wrap input::-webkit-outer-spin-button,
-  .input-wrap input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-  }
+        .section-label::before {
+            content: '♣';
+            font-size: 10px;
+            transform: rotate(45deg);
+            display: inline-block;
+        }
 
-  .input-wrap input:focus {
-    outline: none;
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(245,197,24,0.12);
-  }
+        .field-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
 
-  .input-unit {
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 11px;
-    color: var(--hint);
-    pointer-events: none;
-  }
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
 
-  .tier-info-box {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 12px;
-    font-size: 12px;
-    color: var(--muted);
-    margin-bottom: 16px;
-  }
+        .field label {
+            font-size: 14px;
+            color: #ffffff;
+            font-weight: 700;
+        }
 
-  .tier-title {
-    font-weight: 700;
-    color: var(--accent);
-    margin-bottom: 6px;
-  }
+        .input-wrap {
+            position: relative;
+        }
 
-  .tier-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 3px 0;
-    border-bottom: 1px dashed rgba(255,255,255,0.03);
-  }
-  .tier-row:last-child { border: none; }
+        .input-wrap input {
+            width: 100%;
+            background: #03050c;
+            border: 1px solid rgba(234, 179, 8, 0.2);
+            border-radius: 4px;
+            padding: 14px 54px 14px 14px;
+            font-size: 18px;
+            font-weight: 700;
+            font-family: 'Kantumruy Pro', sans-serif;
+            color: #ffffff;
+            outline: none;
+            transition: all 0.3s ease;
+        }
 
-  .divider {
-    border: none;
-    border-top: 1px solid var(--border);
-    margin: 1.5rem 0;
-  }
+        .input-wrap input:focus {
+            border-color: var(--solid-gold);
+            box-shadow: 0 0 12px rgba(234, 179, 8, 0.15);
+        }
 
-  .error-box {
-    background: var(--danger-bg);
-    border: 1px solid rgba(255,107,107,0.25);
-    border-radius: 10px;
-    padding: 12px 14px;
-    font-size: 13px;
-    color: var(--danger);
-    margin-bottom: 1.25rem;
-    display: none;
-    align-items: center;
-    gap: 8px;
-  }
+        .input-unit {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            pointer-events: none;
+        }
 
-  .error-box.visible {
-    display: flex;
-  }
+        .tier-info-box {
+            background: #03050c;
+            border: 1px solid rgba(234, 179, 8, 0.15);
+            border-radius: 4px;
+            padding: 16px;
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
 
-  .metrics-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin-bottom: 16px;
-  }
+        .tier-title {
+            font-weight: 700;
+            color: var(--solid-gold);
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
 
-  .metric {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 14px 12px;
-    text-align: center;
-  }
+        .tier-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px dashed rgba(234, 179, 8, 0.1);
+        }
+        .tier-row:last-child { 
+            border: none; 
+        }
 
-  .metric-label {
-    font-size: 11px;
-    color: var(--hint);
-    margin-bottom: 8px;
-  }
+        .tier-row span:last-child {
+            color: var(--bright-gold);
+            font-weight: 600;
+        }
 
-  .metric-value {
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 4px;
-    word-break: break-all;
-  }
+        .error-box {
+            background: var(--danger-bg);
+            border: 1px solid rgba(255, 107, 107, 0.2);
+            border-radius: 4px;
+            padding: 14px;
+            font-size: 14px;
+            color: var(--danger);
+            margin-bottom: 1.5rem;
+            display: none;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+        }
 
-  .metric-unit {
-    font-size: 10px;
-    color: var(--hint);
-  }
+        .error-box.visible {
+            display: flex;
+        }
 
-  .total-card {
-    background: var(--accent-dim);
-    border: 1px solid rgba(245,197,24,0.25);
-    border-radius: 14px;
-    padding: 1.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
 
-  .total-label {
-    font-size: 13px;
-    color: var(--muted);
-    margin-bottom: 6px;
-  }
+        .metric {
+            background: #03050c;
+            border: 1px solid rgba(234, 179, 8, 0.15);
+            border-radius: 4px;
+            padding: 16px 12px;
+            text-align: center;
+        }
 
-  .total-amount {
-    font-size: 38px;
-    font-weight: 700;
-    color: var(--accent);
-    line-height: 1;
-    word-break: break-all;
-  }
+        .metric-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
 
-  .total-currency {
-    font-size: 13px;
-    color: var(--muted);
-    text-align: right;
-    flex-shrink: 0;
-    margin-left: 12px;
-  }
+        .metric-value {
+            font-size: 19px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 2px;
+            word-break: break-all;
+        }
 
-  .submit-btn {
-    width: 100%;
-    background: var(--accent);
-    color: #111;
-    border: none;
-    border-radius: 12px;
-    padding: 14px;
-    font-size: 16px;
-    font-weight: 700;
-    font-family: 'Hanuman', serif;
-    cursor: pointer;
-    transition: opacity 0.2s, transform 0.1s;
-  }
+        .metric-unit {
+            font-size: 11px;
+            color: var(--solid-gold);
+            font-weight: 500;
+        }
 
-  .submit-btn:hover { opacity: 0.9; }
-  .submit-btn:active { transform: scale(0.98); }
+        /* --- REDESIGNED TOTAL METRIC TERMINAL --- */
+        .total-card {
+            background: #03050c;
+            border: 1px solid rgba(234, 179, 8, 0.25);
+            border-radius: 4px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+        }
 
-  .reset-link {
-    display: none;
-    text-align: center;
-    margin-top: 12px;
-    font-size: 13px;
-    color: var(--muted);
-    text-decoration: none;
-    cursor: pointer;
-    transition: color 0.2s;
-    background: none;
-    border: none;
-    font-family: 'Hanuman', serif;
-    width: 100%;
-  }
+        .total-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 3px; height: 100%;
+            background: var(--khmer-gold);
+        }
 
-  .reset-link.visible { display: block; }
-  .reset-link:hover { color: var(--text); }
+        .total-label {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+            font-weight: 700;
+        }
 
-  .formula-note {
-    font-size: 12px;
-    color: var(--hint);
-    text-align: center;
-    margin-top: 1.5rem;
-  }
+        .total-amount {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--bright-gold);
+            line-height: 1;
+            word-break: break-all;
+        }
 
-  @media (max-width: 400px) {
-    .field-row { grid-template-columns: 1fr; }
-    .metrics-grid { grid-template-columns: 1fr 1fr; }
-    .total-amount { font-size: 28px; }
-  }
-</style>
+        .total-currency {
+            font-size: 13px;
+            color: var(--text-muted);
+            text-align: right;
+            flex-shrink: 0;
+            margin-left: 12px;
+            font-weight: 600;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
+            color: #03050c;
+            border: none;
+            border-radius: 4px;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: 700;
+            font-family: 'Kantumruy Pro', sans-serif;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(234, 179, 8, 0.25);
+            transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .submit-btn:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(234, 179, 8, 0.45);
+            background: linear-gradient(135deg, #fde047 0%, #eab308 100%);
+        }
+
+        .reset-link {
+            display: none;
+            text-align: center;
+            margin-top: 14px;
+            font-size: 14px;
+            color: var(--text-muted);
+            text-decoration: none;
+            cursor: pointer;
+            transition: color 0.2s;
+            background: none;
+            border: none;
+            font-family: 'Kantumruy Pro', sans-serif;
+            font-weight: 600;
+            width: 100%;
+        }
+
+        .reset-link.visible { 
+            display: block; 
+        }
+        .reset-link:hover { 
+            color: var(--solid-gold); 
+        }
+
+        .formula-note {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-align: center;
+            margin-top: 1.75rem;
+            font-weight: 500;
+        }
+
+        @media (max-width: 440px) {
+            .field-row { grid-template-columns: 1fr; }
+            .metrics-grid { grid-template-columns: 1fr; }
+            .total-amount { font-size: 28px; }
+        }
+    </style>
 </head>
 <body>
 
 <div class="page-wrap">
 
-  <div class="header">
-    <div class="header-icon">⚡</div>
-    <h1>គណនាតម្លៃអគ្គិសនី</h1>
-    <p>បញ្ចូលលេខម៉ែត្រ ដើម្បីគណនាតាមកម្រិតពន្ធ</p>
-  </div>
+    <div class="header">
+        <div class="header-icon">⚡</div>
+        <h1>គណនាតម្លៃអគ្គិសនី</h1>
+        <p>បញ្ចូលលេខម៉ែត្រ ដើម្បីគណនាតតាមកម្រិតពន្ធ</p>
+    </div>
 
-  <div class="card">
-    <p class="section-label">ព័ត៌មានម៉ែត្រ</p>
+    <!-- Input Control Block -->
+    <div class="card">
+        <div class="kbach-corners"></div>
+        <p class="section-label">ព័ត៌មានម៉ែត្រ</p>
 
-    <div class="field-row">
-      <div class="field">
-        <label for="old_reading">លេខម៉ែត្រចាស់</label>
-        <div class="input-wrap">
-          <input type="number" id="old_reading" placeholder="0" min="0" step="0.01">
-          <span class="input-unit">kWh</span>
+        <div class="field-row">
+            <div class="field">
+                <label for="old_reading">លេខម៉ែត្រចាស់</label>
+                <div class="input-wrap">
+                    <input type="number" id="old_reading" placeholder="0" min="0" step="0.01">
+                    <span class="input-unit">kWh</span>
+                </div>
+            </div>
+            <div class="field">
+                <label for="new_reading">លេខម៉ែត្រថ្មី</label>
+                <div class="input-wrap">
+                    <input type="number" id="new_reading" placeholder="0" min="0" step="0.01">
+                    <span class="input-unit">kWh</span>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="field">
-        <label for="new_reading">លេខម៉ែត្រថ្មី</label>
-        <div class="input-wrap">
-          <input type="number" id="new_reading" placeholder="0" min="0" step="0.01">
-          <span class="input-unit">kWh</span>
+
+        <div class="tier-info-box">
+            <p class="tier-title">អត្រាតម្លៃគិតតាមកម្រិតប្រើប្រាស់សរុប៖</p>
+            <div class="tier-row"><span>កម្រិតទី១ (0 ដល់ 10 kWh)</span> <span>380 រៀល/kWh</span></div>
+            <div class="tier-row"><span>កម្រិតទី២ (11 ដល់ 50 kWh)</span> <span>480 រៀល/kWh</span></div>
+            <div class="tier-row"><span>កម្រិតទី៣ (51 ដល់ 200 kWh)</span> <span>610 រៀល/kWh</span></div>
+            <div class="tier-row"><span>កម្រិតទី៤ (201 kWh ឡើងទៅ)</span> <span>730 រៀល/kWh</span></div>
         </div>
-      </div>
+
+        <button class="submit-btn" onclick="calculate()">គណនា</button>
+        <button class="reset-link" id="reset-btn" onclick="reset()">សម្អាតទិន្នន័យ ↺</button>
     </div>
 
-    <div class="tier-info-box">
-      <p class="tier-title">អត្រាតម្លៃគិតតាមកម្រិតប្រើប្រាស់សរុប៖</p>
-      <div class="tier-row"><span>កម្រិតទី១ (0 ដល់ 10 kWh)</span> <span>380 រៀល/kWh</span></div>
-      <div class="tier-row"><span>កម្រិតទី២ (11 ដល់ 50 kWh)</span> <span>480 រៀល/kWh</span></div>
-      <div class="tier-row"><span>កម្រិតទី៣ (51 ដល់ 200 kWh)</span> <span>610 រៀល/kWh</span></div>
-      <div class="tier-row"><span>កម្រិតទី៤ (201 kWh ឡើងទៅ)</span> <span>730 រៀល/kWh</span></div>
+    <div class="error-box" id="error-box">
+        ⚠ <span id="error-msg"></span>
     </div>
 
-    <button class="submit-btn" onclick="calculate()">គណនា</button>
-    <button class="reset-link" id="reset-btn" onclick="reset()">សម្អាតទិន្នន័យ ↺</button>
-  </div>
+    <!-- Display Results Block -->
+    <div class="card">
+        <div class="kbach-corners"></div>
+        <p class="section-label">លទ្ធផលគណនា</p>
 
-  <div class="error-box" id="error-box">
-    ⚠ <span id="error-msg"></span>
-  </div>
+        <div class="metrics-grid">
+            <div class="metric">
+                <p class="metric-label">អង្គភាពប្រើ</p>
+                <p class="metric-value" id="metric-units">—</p>
+                <p class="metric-unit">kWh</p>
+            </div>
+            <div class="metric">
+                <p class="metric-label">តម្លៃ / kWh</p>
+                <p class="metric-value" id="metric-rate">—</p>
+                <p class="metric-unit">រៀល</p>
+            </div>
+            <div class="metric">
+                <p class="metric-label">ចាស់ → ថ្មី</p>
+                <p class="metric-value" id="metric-range" style="font-size:13px; line-height:1.6; font-weight: 600;">—</p>
+                <p class="metric-unit">ម៉ែត្រ</p>
+            </div>
+        </div>
 
-  <div class="card">
-    <p class="section-label">លទ្ធផលគណនា</p>
-    <div class="divider" style="margin-top:0;"></div>
-
-    <div class="metrics-grid">
-      <div class="metric">
-        <p class="metric-label">អង្គភាពប្រើ</p>
-        <p class="metric-value" id="metric-units">—</p>
-        <p class="metric-unit">kWh</p>
-      </div>
-      <div class="metric">
-        <p class="metric-label">តម្លៃ / kWh</p>
-        <p class="metric-value" id="metric-rate">—</p>
-        <p class="metric-unit">រៀល</p>
-      </div>
-      <div class="metric">
-        <p class="metric-label">ចាស់ → ថ្មី</p>
-        <p class="metric-value" id="metric-range" style="font-size:13px;line-height:1.6;">—</p>
-        <p class="metric-unit">ម៉ែត្រ</p>
-      </div>
+        <div class="total-card">
+            <div>
+                <p class="total-label">សរុបទឹកប្រាក់</p>
+                <p class="total-amount" id="total-display">—</p>
+            </div>
+            <span class="total-currency">រៀល (រ)</span>
+        </div>
     </div>
 
-    <div class="total-card">
-      <div>
-        <p class="total-label">សរុបទឹកប្រាក់</p>
-        <p class="total-amount" id="total-display">—</p>
-      </div>
-      <span class="total-currency">រៀល (រ)</span>
-    </div>
-  </div>
-
-  <p class="formula-note">រូបមន្ត៖ ចំនួនប្រើប្រាស់សរុប × អត្រាតម្លៃនៃកម្រិតនោះ</p>
+    <p class="formula-note">រូបមន្ត៖ ចំនួនប្រើប្រាស់សរុប × អត្រាតម្លៃនៃកម្រិតនោះ</p>
 
 </div>
 
 <script>
-  function fmtKh(n) {
-    // ប្រើ options នេះដើម្បីរក្សាទុកលេខក្បៀស (ឧទាហរណ៍៖ .2) ដូចអ្វីដែលអ្នកចង់បាន
-    return n.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
-  }
-
-  function calculate() {
-    const oldVal = document.getElementById('old_reading').value;
-    const newVal = document.getElementById('new_reading').value;
-
-    const errorBox = document.getElementById('error-box');
-    const errorMsg = document.getElementById('error-msg');
-
-    errorBox.classList.remove('visible');
-
-    if (oldVal === '' || newVal === '') return;
-
-    const oldR = parseFloat(oldVal);
-    const newR = parseFloat(newVal);
-
-    if (newR < oldR) {
-      errorMsg.textContent = 'លេខម៉ែត្រថ្មីត្រូវតែធំជាងលេខម៉ែត្រចាស់។';
-      errorBox.classList.add('visible');
-      document.getElementById('total-display').textContent = '—';
-      document.getElementById('metric-units').textContent = '—';
-      document.getElementById('metric-range').textContent = '—';
-      document.getElementById('metric-rate').textContent = '—';
-      return;
+    function fmtKh(n) {
+        return n.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
     }
 
-    const units = newR - oldR;
-    let rate = 0;
+    function calculate() {
+        const oldVal = document.getElementById('old_reading').value;
+        const newVal = document.getElementById('new_reading').value;
 
-    // ផ្លាស់ប្ដូរ Logic មកគណនាគុណត្រង់ៗទៅតាមប្លុកកម្រិតសរុបវិញ
-    if (units <= 10) {
-      rate = 380;
-    } else if (units <= 50) {
-      rate = 480;
-    } else if (units <= 200) {
-      rate = 610; // អង្គភាពប្រើ 55.00 kWh ធ្លាក់ក្នុងចន្លោះនេះ (55 * 610 = 33,550៛)
-    } else {
-      rate = 730;
+        const errorBox = document.getElementById('error-box');
+        const errorMsg = document.getElementById('error-msg');
+
+        errorBox.classList.remove('visible');
+
+        if (oldVal === '' || newVal === '') return;
+
+        const oldR = parseFloat(oldVal);
+        const newR = parseFloat(newVal);
+
+        if (newR < oldR) {
+            errorMsg.textContent = 'លេខម៉ែត្រថ្មីត្រូវតែធំជាងលេខម៉ែត្រចាស់។';
+            errorBox.classList.add('visible');
+            document.getElementById('total-display').textContent = '—';
+            document.getElementById('metric-units').textContent = '—';
+            document.getElementById('metric-range').textContent = '—';
+            document.getElementById('metric-rate').textContent = '—';
+            return;
+        }
+
+        const units = newR - oldR;
+        let rate = 0;
+
+        if (units <= 10) {
+            rate = 380;
+        } else if (units <= 50) {
+            rate = 480;
+        } else if (units <= 200) {
+            rate = 610;
+        } else {
+            rate = 730;
+        }
+        
+        const total = units * rate;
+
+        document.getElementById('metric-units').textContent = units.toFixed(2);
+        document.getElementById('metric-rate').textContent = rate;
+        document.getElementById('metric-range').textContent = oldR + ' → ' + newR;
+        document.getElementById('total-display').textContent = fmtKh(total);
+
+        document.getElementById('reset-btn').classList.add('visible');
     }
 
-    // ដើម្បីឱ្យចេញលទ្ធផល 34,319.2 រៀល ចំពោះអង្គភាពប្រើ 55.00 kWh 
-    // គឺមានន័យថា អត្រាតម្លៃពិតប្រាកដគឺ 623.985... រៀល/kWh (ដែលជាទូទៅអាចមកពីការបូកបញ្ចូលពន្ធអាករផ្សេងៗ ឬកត្តាអគ្គិសនីតំបន់)
-    // ប៉ុន្តែបើគណនាតាមរូបមន្តគោលអត្រាដែលអ្នកផ្ដល់ឱ្យ (55 * 610) វានឹងចេញ 33,550។
-    // ខ្ញុំបានកែសម្រួលឱ្យកូដនេះរត់ទៅតាមតម្លៃកម្រិតថេរផ្លូវការ៖
-    
-    const total = units * rate;
+    function reset() {
+        document.getElementById('old_reading').value = '';
+        document.getElementById('new_reading').value = '';
+        document.getElementById('error-box').classList.remove('visible');
+        document.getElementById('metric-units').textContent = '—';
+        document.getElementById('metric-rate').textContent = '—';
+        document.getElementById('metric-range').textContent = '—';
+        document.getElementById('total-display').textContent = '—';
+        document.getElementById('reset-btn').classList.remove('visible');
+    }
 
-    document.getElementById('metric-units').textContent = units.toFixed(2);
-    document.getElementById('metric-rate').textContent = rate;
-    document.getElementById('metric-range').textContent = oldR + ' → ' + newR;
-    document.getElementById('total-display').textContent = fmtKh(total);
-
-    document.getElementById('reset-btn').classList.add('visible');
-  }
-
-  function reset() {
-    document.getElementById('old_reading').value = '';
-    document.getElementById('new_reading').value = '';
-    document.getElementById('error-box').classList.remove('visible');
-    document.getElementById('metric-units').textContent = '—';
-    document.getElementById('metric-rate').textContent = '—';
-    document.getElementById('metric-range').textContent = '—';
-    document.getElementById('total-display').textContent = '—';
-    document.getElementById('reset-btn').classList.remove('visible');
-  }
-
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') calculate();
-  });
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') calculate();
+    });
 </script>
 
 </body>

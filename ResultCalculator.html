@@ -4,113 +4,250 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>កម្មវិធីគណនាលទ្ធផលឆមាសសិស្ស</title>
+    <!-- Importing modern clean Khmer & English fonts matching the master style -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:ital,wght@0,100..700;1,100..700&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+    
     <style>
         :root {
-            --bg-color: #060a45;
-            --card-bg: #0a02f54a;
-            --text-main: #333333;
-            --text-muted: #666666;
-            --border-color: #291acc;
-            --primary: #2563eb;
-            --primary-hover: #1d4ed8;
+            --khmer-gold: linear-gradient(135deg, #ffd700 0%, #b45309 50%, #ffd700 100%);
+            --solid-gold: #eab308;
+            --bright-gold: #fde047;
+            --khmer-gold-glow: rgba(234, 179, 8, 0.3);
+            --dark-surface: #03050c;
+            --dark-card: linear-gradient(180deg, rgba(19, 28, 46, 0.9), rgba(10, 15, 29, 0.98));
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
             
-            /* Status Colors */
-            --status-pass-bg: #ffffff;
-            --status-pass-text: #166534;
-            --status-warning-bg: #fef9c3;
-            --status-warning-text: #854d0e;
-            --status-danger-bg: #fee2e2;
-            --status-danger-text: #991b1b;
+            /* Enhanced Luxury Status System Colors */
+            --status-pass-bg: rgba(34, 197, 94, 0.1);
+            --status-pass-text: #4ade80;
+            --status-pass-border: rgba(34, 197, 94, 0.25);
+            
+            --status-warning-bg: rgba(234, 179, 8, 0.1);
+            --status-warning-text: #fde047;
+            --status-warning-border: rgba(234, 179, 8, 0.25);
+            
+            --status-danger-bg: rgba(239, 68, 68, 0.1);
+            --status-danger-text: #fca5a5;
+            --status-danger-border: rgba(239, 68, 68, 0.25);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            font-family: "Khmer OS Battambang", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background-color: var(--bg-color);
+            font-family: "Kantumruy Pro", "Plus Jakarta Sans", Arial, sans-serif;
+            background: var(--dark-surface);
             color: var(--text-main);
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
+            line-height: 1.7;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            padding: 24px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Ambient Traditional Khmer Angkorean Grid Background Matrix */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: 
+                radial-gradient(rgba(234, 179, 8, 0.02) 2px, transparent 2px),
+                linear-gradient(45deg, rgba(234, 179, 8, 0.01) 25%, transparent 25%, transparent 75%, rgba(234, 179, 8, 0.01) 75%, rgba(234, 179, 8, 0.01)),
+                linear-gradient(45deg, rgba(234, 179, 8, 0.01) 25%, #03050c 25%, #03050c 75%, rgba(234, 179, 8, 0.01) 75%, rgba(234, 179, 8, 0.01));
+            background-size: 30px 30px, 60px 60px, 60px 60px;
+            background-position: 0 0, 0 0, 30px 30px;
+            z-index: -1;
+            pointer-events: none;
         }
 
         .container {
             width: 100%;
             max-width: 650px;
-            background: var(--card-bg);
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         h2 {
-            margin-top: 0;
-            margin-bottom: 20px;
-            color: #ecedef;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 10px;
+            font-size: 24px;
+            font-weight: 800;
+            background: var(--khmer-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+            padding-bottom: 14px;
+            border-bottom: 1px solid rgba(234, 179, 8, 0.2);
+            text-shadow: 0 0 15px rgba(234, 179, 8, 0.1);
+        }
+
+        h2::after {
+            content: '♣';
+            position: absolute;
+            bottom: -7px; left: 50%;
+            transform: translateX(-50%) rotate(45deg);
+            color: var(--solid-gold);
+            font-size: 12px;
+        }
+
+        /* --- HIGH-END KBACH KHMER ARCHITECTURAL FORM FRAME --- */
+        .input-card {
+            background: var(--dark-card);
+            border: 2px solid #a16207;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 0 25px rgba(234, 179, 8, 0.05);
+            border-radius: 4px;
+            padding: 35px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        /* Sharp Roof Peak Points (Chfa Accents) at top left/right corners */
+        .input-card::before {
+            content: 'ឝ';
+            position: absolute;
+            top: -24px; left: -8px;
+            color: var(--solid-gold);
+            font-size: 28px;
+            font-weight: normal;
+            text-shadow: 0 -2px 10px var(--khmer-gold-glow);
+            z-index: 5;
+        }
+
+        .input-card::after {
+            content: 'ឞ';
+            position: absolute;
+            top: -24px; right: -8px;
+            color: var(--solid-gold);
+            font-size: 28px;
+            font-weight: normal;
+            text-shadow: 0 -2px 10px var(--khmer-gold-glow);
+            z-index: 5;
+        }
+
+        /* Traditional Angkorean Corner Pediment Decorative Fills */
+        .kbach-corners {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            border-radius: inherit;
+        }
+        .kbach-corners::before {
+            content: '៚';
+            position: absolute;
+            bottom: -2px; left: 4px;
+            color: #78350f;
+            font-size: 14px;
+            opacity: 0.6;
+        }
+        .kbach-corners::after {
+            content: '៚';
+            position: absolute;
+            bottom: -2px; right: 4px;
+            color: #78350f;
+            font-size: 14px;
+            opacity: 0.6;
+            transform: scaleX(-1);
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 22px;
         }
 
         label {
             display: block;
-            font-weight: 600;
-            margin-bottom: 6px;
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 10px;
             color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        label::before {
+            content: '♣';
+            font-size: 9px;
+            transform: rotate(45deg);
+            color: var(--solid-gold);
+            display: inline-block;
         }
 
         input[type="text"],
         input[type="number"] {
             width: 100%;
-            padding: 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
+            padding: 14px 16px;
+            border: 1px solid rgba(234, 179, 8, 0.2);
+            border-radius: 4px;
+            background: #03050c;
+            color: #ffffff;
             font-size: 16px;
-            box-sizing: border-box;
-            transition: border-color 0.2s;
+            font-family: "Kantumruy Pro", sans-serif;
+            outline: none;
+            transition: all 0.3s ease;
         }
 
         input:focus {
-            outline: none;
-            border-color: var(--primary);
+            border-color: var(--solid-gold);
+            box-shadow: 0 0 12px rgba(234, 179, 8, 0.15);
         }
 
         .row {
             display: flex;
-            gap: 15px;
+            gap: 16px;
         }
 
         .row .form-group {
             flex: 1;
         }
 
+        /* --- REDESIGNED RESULTS FRAME CONTAINER --- */
         .result-card {
-            margin-top: 30px;
-            border: 2px dashed var(--border-color);
-            border-radius: 8px;
-            padding: 20px;
-            background-color: #bcc0fb;
+            background: #03050c;
+            border: 1px solid rgba(234, 179, 8, 0.25);
+            border-radius: 4px;
+            padding: 26px;
+            position: relative;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.6);
+        }
+
+        .result-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 3px; height: 100%;
+            background: var(--khmer-gold);
         }
 
         .result-title {
-            font-size: 18px;
-            font-weight: bold;
+            font-size: 15px;
+            font-weight: 700;
             text-align: center;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             letter-spacing: 0.5px;
-            color: #4b5563;
+            color: var(--solid-gold);
+            border-bottom: 1px dashed rgba(234, 179, 8, 0.15);
+            padding-bottom: 12px;
         }
 
         .result-line {
             display: flex;
             justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid #f0f0f0;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
         }
 
         .result-line:last-of-type {
@@ -118,34 +255,54 @@
         }
 
         .result-label {
-            font-weight: 500;
+            font-weight: 600;
+            font-size: 14px;
             color: var(--text-muted);
         }
 
         .result-value {
-            font-weight: 600;
+            font-weight: 700;
+            color: #ffffff;
+            font-size: 16px;
         }
 
+        /* Dynamic High-Tech Status Badges */
         .status-badge {
             display: inline-block;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-weight: bold;
+            padding: 6px 16px;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 13px;
             text-align: right;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
         }
 
-        /* Dynamic Status Classes */
         .status-pass {
             background-color: var(--status-pass-bg);
             color: var(--status-pass-text);
+            border-color: var(--status-pass-border);
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.1);
         }
+        
         .status-warning {
             background-color: var(--status-warning-bg);
             color: var(--status-warning-text);
+            border-color: var(--status-warning-border);
+            box-shadow: 0 0 10px rgba(234, 179, 8, 0.1);
         }
+        
         .status-danger {
             background-color: var(--status-danger-bg);
             color: var(--status-danger-text);
+            border-color: var(--status-danger-border);
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.1);
+        }
+
+        @media (max-width: 580px) {
+            .row { flex-direction: column; gap: 0; }
+            .result-line { flex-direction: column; align-items: flex-start; gap: 6px; }
+            .status-badge { width: 100%; text-align: center; }
         }
     </style>
 </head>
@@ -154,50 +311,54 @@
 <div class="container">
     <h2>កម្មវិធីវាយតម្លៃស្ថានភាពសិស្ស</h2>
     
-    <!-- 1. Input Phase -->
-    <div class="form-group">
-        <label for="studentName">ឈ្មោះសិស្ស</label>
-        <input type="text" id="studentName" value="" placeholder="">
-    </div>
-
-    <div class="row">
-        <div class="form-group">
-            <label for="absences">ចំនួនអវត្តមាន(Absences)</label>
-            <input type="number" id="absences" value="" min="0" max="100">
-        </div>
-        <div class="form-group">
-            <label for="midtermScore">ពិន្ទុឆមាសទី១ (Midterm)</label>
-            <input type="number" id="midtermScore" value="" min="0" max="50">
-        </div>
-        <div class="form-group">
-            <label for="finalScore">ពិន្ទុប្រឡងឆមាស (Final) </label>
-            <input type="number" id="finalScore" value="" min="0" max="50">
-        </div>
-    </div>
-
-    <!-- 4. Output Phase Box -->
-    <div class="result-card">
-        <div class="result-title">--- លទ្ធផលឆមាសសិស្ស ---</div>
+    <!-- 1. Input Processing Interface Card -->
+    <div class="input-card">
+        <div class="kbach-corners"></div>
         
-        <div class="result-line">
-            <span class="result-label">ឈ្មោះសិស្ស:</span>
-            <span class="result-value" id="outName">-</span>
+        <div class="form-group">
+            <label for="studentName">ឈ្មោះសិស្ស</label>
+            <input type="text" id="studentName" value="" placeholder="បញ្ចូលឈ្មោះសិស្ស...">
         </div>
-        <div class="result-line">
-            <span class="result-label">ពិន្ទុឆមាសទី១ (Midterm):</span>
-            <span class="result-value" id="outMidterm">0</span>
+
+        <div class="row">
+            <div class="form-group">
+                <label for="absences">ចំនួនអវត្តមាន</label>
+                <input type="number" id="absences" value="" min="0" max="100" placeholder="0">
+            </div>
+            <div class="form-group">
+                <label for="midtermScore">ពិន្ទុឆមាសទី១ (Midterm)</label>
+                <input type="number" id="midtermScore" value="" min="0" max="50" placeholder="0">
+            </div>
+            <div class="form-group">
+                <label for="finalScore">ពិន្ទុប្រឡងឆមាស (Final)</label>
+                <input type="number" id="finalScore" value="" min="0" max="50" placeholder="0">
+            </div>
         </div>
-        <div class="result-line">
-            <span class="result-label">ពិន្ទុប្រឡងឆមាស (Final):</span>
-            <span class="result-value" id="outFinal">0</span>
-        </div>
-        <div class="result-line">
-            <span class="result-label">ពិន្ទុសរុប:</span>
-            <span class="result-value" id="outTotal">0</span>
-        </div>
-        <div class="result-line" style="align-items: center; margin-top: 10px;">
-            <span class="result-label">ស្ថានភាពចុងក្រោយ:</span>
-            <span class="status-badge" id="outStatus">-</span>
+
+        <!-- 2. Integrated Terminal Output Box -->
+        <div class="result-card">
+            <div class="result-title">៚ លទ្ធផលឆមាសសិស្ស ៚</div>
+            
+            <div class="result-line">
+                <span class="result-label">ឈ្មោះសិស្ស:</span>
+                <span class="result-value" id="outName">-</span>
+            </div>
+            <div class="result-line">
+                <span class="result-label">ពិន្ទុឆមាសទី១ (Midterm):</span>
+                <span class="result-value" id="outMidterm">0</span>
+            </div>
+            <div class="result-line">
+                <span class="result-label">ពិន្ទុប្រឡងឆមាស (Final):</span>
+                <span class="result-value" id="outFinal">0</span>
+            </div>
+            <div class="result-line">
+                <span class="result-label">ពិន្ទុសរុប:</span>
+                <span class="result-value" id="outTotal">0</span>
+            </div>
+            <div class="result-line">
+                <span class="result-label">ស្ថានភាពចុងក្រោយ:</span>
+                <span class="status-badge" id="outStatus">-</span>
+            </div>
         </div>
     </div>
 </div>
@@ -225,7 +386,7 @@
         // 2. Calculation Phase
         const totalScore = midtermScore + finalScore;
 
-        // 3. Conditional Logic Phase (Strictly mirrored from your pseudocode)
+        // 3. Conditional Logic Phase 
         let resultStatus = "";
         let statusClass = "";
 
@@ -259,7 +420,6 @@
         outTotal.textContent = totalScore;
         
         outStatus.textContent = resultStatus;
-        // Reset and apply proper badge styling color
         outStatus.className = "status-badge " + statusClass;
     }
 

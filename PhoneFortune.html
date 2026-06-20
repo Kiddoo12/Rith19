@@ -4,8 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phone Fortune Predictor</title>
-    <link href="https://fonts.googleapis.com/css2?family=Hanuman:wght@400;700&family=Kantumruy+Pro:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:ital,wght@0,100..700;1,100..700&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+    
     <style>
+        :root {
+            --khmer-gold: linear-gradient(135deg, #ffd700 0%, #b45309 50%, #ffd700 100%);
+            --solid-gold: #eab308;
+            --bright-gold: #fde047;
+            --khmer-gold-glow: rgba(234, 179, 8, 0.3);
+            --dark-surface: #03050c;
+            --dark-card: linear-gradient(180deg, rgba(19, 28, 46, 0.9), rgba(10, 15, 29, 0.98));
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --success-color: #4ade80;
+            --error-color: #f87171;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,172 +29,329 @@
         }
 
         body {
-            font-family: Arial, 'Hanuman', sans-serif;
-            background: #0b1120;
-            color: #e5e7eb;
+            font-family: "Kantumruy Pro", "Plus Jakarta Sans", Arial, sans-serif;
+            background: var(--dark-surface);
+            color: var(--text-main);
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 20px;
+            padding: 24px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Ambient Traditional Khmer Angkorean Grid Background Matrix */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: 
+                radial-gradient(rgba(234, 179, 8, 0.02) 2px, transparent 2px),
+                linear-gradient(45deg, rgba(234, 179, 8, 0.01) 25%, transparent 25%, transparent 75%, rgba(234, 179, 8, 0.01) 75%, rgba(234, 179, 8, 0.01)),
+                linear-gradient(45deg, rgba(234, 179, 8, 0.01) 25%, #03050c 25%, #03050c 75%, rgba(234, 179, 8, 0.01) 75%, rgba(234, 179, 8, 0.01));
+            background-size: 30px 30px, 60px 60px, 60px 60px;
+            background-position: 0 0, 0 0, 30px 30px;
+            z-index: -1;
+            pointer-events: none;
         }
 
         .container {
             width: 100%;
-            max-width: 650px;
+            max-width: 580px;
+            animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header-section {
             text-align: center;
+            margin-bottom: 35px;
         }
 
         .main-title {
-            font-size: 42px;
-            font-weight: bold;
-            color: #ffffff;
+            font-size: 36px;
+            font-weight: 800;
+            background: var(--khmer-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             margin-bottom: 12px;
-            letter-spacing: 0.5px;
+            letter-spacing: -0.5px;
+            text-shadow: 0 0 15px rgba(234, 179, 8, 0.1);
         }
 
         .sub-title {
-            color: #94a3b8;
+            color: var(--text-muted);
             font-size: 15px;
-            margin-bottom: 45px;
+            font-weight: 500;
         }
 
+        /* --- HIGH-END KBACH KHMER ARCHITECTURAL FRAME --- */
         .predict-card {
-            background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 24px;
-            padding: 40px 35px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-            text-align: left;
+            background: var(--dark-card);
+            border: 2px solid #a16207;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), inset 0 0 25px rgba(234, 179, 8, 0.05);
+            border-radius: 4px;
+            padding: 45px 40px;
+            position: relative;
+        }
+
+        /* Sharp Roof Peak Points (Chfa Accents) at top left/right corners */
+        .predict-card::before {
+            content: 'ឝ';
+            position: absolute;
+            top: -24px; left: -8px;
+            color: var(--solid-gold);
+            font-size: 28px;
+            font-weight: normal;
+            text-shadow: 0 -2px 10px var(--khmer-gold-glow);
+            z-index: 5;
+        }
+
+        .predict-card::after {
+            content: 'ឞ';
+            position: absolute;
+            top: -24px; right: -8px;
+            color: var(--solid-gold);
+            font-size: 28px;
+            font-weight: normal;
+            text-shadow: 0 -2px 10px var(--khmer-gold-glow);
+            z-index: 5;
+        }
+
+        /* Traditional Angkorean Corner Pediment Decorative Fills */
+        .kbach-corners {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            border-radius: inherit;
+        }
+        .kbach-corners::before {
+            content: '៚';
+            position: absolute;
+            bottom: -2px; left: 4px;
+            color: #78350f;
+            font-size: 14px;
+            opacity: 0.6;
+        }
+        .kbach-corners::after {
+            content: '៚';
+            position: absolute;
+            bottom: -2px; right: 4px;
+            color: #78350f;
+            font-size: 14px;
+            opacity: 0.6;
+            transform: scaleX(-1);
         }
 
         .card-header {
             text-align: center;
             font-size: 22px;
             color: #ffffff;
-            font-weight: bold;
-            margin-bottom: 25px;
+            font-weight: 700;
+            margin-bottom: 30px;
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            position: relative;
+            padding-bottom: 14px;
+            border-bottom: 1px solid rgba(234, 179, 8, 0.2);
+        }
+        
+        .card-header::after {
+            content: '♣';
+            position: absolute;
+            bottom: -7px; left: 50%;
+            transform: translateX(-50%) rotate(45deg);
+            color: var(--solid-gold);
+            font-size: 12px;
+        }
+
+        .card-header span {
+            font-size: 22px;
+            animation: float 3s ease-in-out infinite;
+            color: var(--solid-gold);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
         }
 
         .message-box {
-            padding: 14px 16px;
-            border-radius: 12px;
-            margin-bottom: 22px;
-            font-weight: bold;
+            padding: 16px;
+            border-radius: 4px;
+            margin-bottom: 25px;
+            font-weight: 600;
             font-size: 14px;
-            display: none; /* Hidden by default */
+            text-align: center;
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .success {
-            background: rgba(34,197,94,0.12);
-            color: #86efac;
-            border: 1px solid rgba(34,197,94,0.18);
+            background: rgba(74, 222, 128, 0.08);
+            color: var(--success-color);
+            border: 1px solid rgba(74, 222, 128, 0.2);
         }
 
         .error {
-            background: rgba(239,68,68,0.12);
-            color: #fca5a5;
-            border: 1px solid rgba(239,68,68,0.18);
+            background: rgba(248, 113, 113, 0.08);
+            color: var(--error-color);
+            border: 1px solid rgba(248, 113, 113, 0.2);
         }
 
         .form-group {
-            margin-bottom: 22px;
+            margin-bottom: 25px;
         }
 
         .form-group label {
             display: block;
             margin-bottom: 12px;
             color: #ffffff;
-            font-weight: bold;
+            font-weight: 700;
             font-size: 15px;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
         }
 
         .form-group input {
             width: 100%;
-            padding: 16px 18px;
-            border-radius: 14px;
-            border: 1px solid rgba(255,255,255,0.08);
-            background: #0f172a;
+            padding: 18px 20px;
+            border-radius: 4px;
+            border: 1px solid rgba(234, 179, 8, 0.2);
+            background: #03050c;
             color: #ffffff;
             outline: none;
-            font-size: 16px;
-            letter-spacing: 0.5px;
-            transition: border-color 0.3s;
+            font-size: 18px;
+            font-family: 'Kantumruy Pro', sans-serif;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input::placeholder {
+            letter-spacing: 0px;
+            color: #4b5563;
+            font-size: 15px;
         }
 
         .form-group input:focus {
-            border-color: rgba(96,165,250,0.45);
+            border-color: var(--solid-gold);
+            background: rgba(255, 255, 255, 0.01);
+            box-shadow: 0 0 15px rgba(234, 179, 8, 0.2);
         }
 
         .btn-submit {
             width: 100%;
-            padding: 15px 24px;
+            padding: 16px 24px;
             border: none;
-            border-radius: 14px;
-            font-weight: bold;
-            font-size: 15px;
-            font-family: 'Hanuman', sans-serif;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 16px;
             cursor: pointer;
-            background: linear-gradient(135deg, #0ea5e9, #2563eb);
-            color: white;
-            box-shadow: 0 8px 20px rgba(14,165,233,0.2);
-            transition: transform 0.2s, box-shadow 0.2s;
+            background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
+            color: #03050c;
+            box-shadow: 0 6px 20px rgba(234, 179, 8, 0.25);
+            transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
         }
 
         .btn-submit:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 10px 25px rgba(14,165,233,0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(234, 179, 8, 0.45);
+            background: linear-gradient(135deg, #fde047 0%, #eab308 100%);
         }
 
+        /* --- REDESIGNED RESULTS TERMINAL --- */
         .result-display {
-            margin-top: 30px;
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 16px;
-            padding: 22px;
-            display: none; /* Hidden by default */
+            margin-top: 35px;
+            background: #03050c;
+            border: 1px solid rgba(234, 179, 8, 0.2);
+            border-radius: 4px;
+            padding: 26px;
+            display: none;
+            animation: expandUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-display::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 3px; height: 100%;
+            background: var(--khmer-gold);
+        }
+
+        @keyframes expandUp {
+            from { opacity: 0; transform: scale(0.97) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .result-header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            border-bottom: 1px solid rgba(234, 179, 8, 0.15);
+            padding-bottom: 12px;
+        }
+
+        .result-title {
+            font-size: 15px;
+            color: var(--text-muted);
+            font-weight: 700;
         }
 
         .result-number {
             display: inline-block;
-            padding: 5px 14px;
-            background: rgba(6, 182, 212, 0.15);
-            color: #22d3ee;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 13px;
-            margin-bottom: 14px;
-            font-family: 'Kantumruy Pro', sans-serif;
+            padding: 6px 14px;
+            background: rgba(234, 179, 8, 0.08);
+            color: var(--bright-gold);
+            border: 1px solid rgba(234, 179, 8, 0.25);
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 14px;
         }
 
         .result-text {
-            color: #e2e8f0;
-            font-size: 16px;
-            line-height: 1.6;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            color: #f3f4f6;
+            font-size: 17px;
+            line-height: 1.7;
         }
 
-        .result-text span {
-            color: #60a5fa;
-            font-weight: bold;
+        .fortune-tag {
+            font-weight: 700;
+            color: var(--solid-gold);
+            margin-right: 6px;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1 class="main-title">Phone Fortune Predictor</h1>
-    <p class="sub-title">កម្មវិធីទស្សន៍ទាយជោគជតារាសីតាមលេខទូរស័ព្ទ (បែបចិន) - បង្កើតឡើងដោយកូដ PHP </p>
+    <div class="header-section">
+        <h1 class="main-title">Phone Fortune Predictor</h1>
+        <p class="sub-title">កម្មវិធីទស្សន៍ទាយជោគជតារាសីតាមលេខទូរស័ព្ទបែបចិន</p>
+    </div>
 
     <div class="predict-card">
+        <div class="kbach-corners"></div>
+        
         <div class="card-header">
-            🔮 ពិនិត្យលេខទូរស័ព្ទរបស់អ្នក 🔮
+            <span>៚</span> ពិនិត្យលេខទូរស័ព្ទរបស់អ្នក <span>៚</span>
         </div>
 
         <div id="success-box" class="message-box success"></div>
@@ -186,16 +359,21 @@
 
         <form id="fortuneForm" onsubmit="predictFortune(event)">
             <div class="form-group">
-                <label for="phone_number">បញ្ចូលលេខទូរស័ព្ទ </label>
-                <input type="text" id="phone_number" name="phone_number" placeholder="ឧទាហរណ៍៖ 0887512032 ឬ 012345678" maxlength="10" autocomplete="off">
+                <label for="phone_number">បញ្ចូលលេខទូរស័ព្ទរបស់អ្នក</label>
+                <div class="input-wrapper">
+                    <input type="text" id="phone_number" name="phone_number" placeholder="ឧទាហរណ៍៖ 0887512032" maxlength="10" autocomplete="off">
+                </div>
             </div>
             <button type="submit" class="btn-submit">គណនាផលទស្សន៍ទាយ</button>
         </form>
 
         <div id="result-display" class="result-display">
-            <div id="result-number" class="result-number"></div>
+            <div class="result-header-flex">
+                <div class="result-title">✨ ផលទំនាយរបស់អ្នក</div>
+                <div id="result-number" class="result-number"></div>
+            </div>
             <div class="result-text">
-                ✨ <strong>ទំនាយពោលថា៖</strong> <span id="result-text-content"></span>
+                <span id="result-text-content"></span>
             </div>
         </div>
     </div>
@@ -204,7 +382,7 @@
 <script>
 const rules = {
     1: "ល្អណាស់ = រីកចំរើនល្អអាចទទួលបានជ័យជំនះ",
-    2: "ធម្មតា = មានលាភមានបង់មិនទទួលផលអ្វីទេ",
+    2: "ធម្មតា = 有លាភមានបង់មិនទទួលផលអ្វីទេ",
     3: "ល្អណាស់ = មានភាពរីកចំរើនអ្វីៗអាចសំរេចបានដូចបំណង",
     4: "អាក្រក់ = ផ្លូវអនាគតមានឧបសគ្គច្រើនលំបាកវេទនា",
     5: "ល្អណាស់ = រកស៊ីមានបានទទួលបានទាំងកិត្តិយសទាំងផលប្រយោជន៍",
@@ -295,19 +473,16 @@ function predictFortune(event) {
     const resultNumDiv = document.getElementById("result-number");
     const resultTextSpan = document.getElementById("result-text-content");
 
-    // លាក់ប្រអប់លទ្ធផលទាំងអស់សិន
     successBox.style.display = "none";
     errorBox.style.display = "none";
     resultDisplay.style.display = "none";
 
-    // ១. ពិនិត្យមើលថាតើប្រអប់ទទេរឬអត់
     if (phoneInput === "") {
         errorBox.textContent = "សូមបញ្ចូលលេខទូរស័ព្ទរបស់អ្នក!";
         errorBox.style.display = "block";
         return;
     }
 
-    // ២. ពិនិត្យមើលថាតើត្រូវចំជាលេខសុទ្ធ និងមានប្រវែង ៩ ឬ ១០ ខ្ទង់ឬអត់
     const numRegex = /^[0-9]{9,10}$/;
     if (!numRegex.test(phoneInput)) {
         errorBox.textContent = "សូមបញ្ចូលលេខទូរស័ព្ទឱ្យបានត្រឹមត្រូវ !";
@@ -315,7 +490,6 @@ function predictFortune(event) {
         return;
     }
 
-    // ៣. ចាប់យក ៦ ខ្ទង់ចុងក្រោយជានិច្ច ទោះបីជាលេខមាន ៩ ឬ ១០ ខ្ទង់ក៏ដោយ
     let last6Digits = phoneInput.slice(-6);
 
     const division = parseInt(last6Digits, 10) / 80;
@@ -330,8 +504,16 @@ function predictFortune(event) {
         successBox.textContent = "គណនាលេខវាសនាបានជោគជ័យ!";
         successBox.style.display = "block";
 
-        resultNumDiv.textContent = "លទ្ធផលលេខកូដ៖ លេខ " + resultNum;
-        resultTextSpan.textContent = rules[resultNum];
+        resultNumDiv.textContent = "កូដលេខ៖ " + resultNum;
+        
+        let rawText = rules[resultNum];
+        if(rawText.includes("=")) {
+            let parts = rawText.split("=");
+            resultTextSpan.innerHTML = `<span class="fortune-tag">🎯 ${parts[0].trim()} :</span> ${parts[1].trim()}`;
+        } else {
+            resultTextSpan.textContent = rawText;
+        }
+        
         resultDisplay.style.display = "block";
     }
 }
